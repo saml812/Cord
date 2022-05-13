@@ -11,15 +11,15 @@ public class User {
     private ArrayList<String> feedHistory;
     private boolean loggedIn;
 
-    public User(String name, String email, String password, int age, ArrayList<User> friends, ArrayList<String> textHistory, ArrayList<String> hobbies, ArrayList<String> feedHistory){
+    public User(String name, String email, String password, int age){
         this.name = name;
         this.email = email;
         this.password = password;
         this.age = age;
-        this.friends = friends;
-        this.textHistory = textHistory;
-        this.hobbies = hobbies;
-        this.feedHistory = feedHistory;
+        friends = new ArrayList<User>();
+        textHistory = new ArrayList<String>();
+        hobbies = new ArrayList<String>();
+        feedHistory = new ArrayList<String>();
         loggedIn = false;
     }
 

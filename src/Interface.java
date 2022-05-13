@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 public class Interface {
     ArrayList<User> accounts = new ArrayList<User>();
+    ArrayList<String> activeFeed = new ArrayList<String>();
     User user = null;
     public void start(){
 
@@ -28,33 +29,43 @@ public class Interface {
                 user = account;
             }
         }
-        System.out.println("Welcome " + user.getName() + "! The greatest media platform ever created!");
+        System.out.println("Welcome " + user.getName() + "! The greatest media platform ever created!\nDisclaimer: no lol");
         Scanner s = new Scanner(System.in);
+        String menuOption = "";
+        while (!menuOption.equals("s"))
+        {
+            System.out.println("------------ Main Menu ----------");
+            System.out.println("- (f)eed");
+            System.out.println("- (d)irect messages");
+            System.out.println("- (p)rofiles");
+            System.out.println("- (s)ign out");
+            System.out.print("Enter choice: ");
+            menuOption = s.nextLine();
+
+            if (!menuOption.equals("s"))
+            {
+                processOption(menuOption);
+            }
+        }
+        if (menuOption.equals("s")){
+            System.out.println();
+           user.setLoggedIn(false);
+           user = null;
+           start();
+        }
     }
 
     private void processOption(String option)
     {
-        if (option.equals("1"))
+        if (option.equals("f"))
+        {
+            feed();
+        }
+        else if (option.equals("d"))
         {
 
         }
-        else if (option.equals("2"))
-        {
-
-        }
-        else if (option.equals("3"))
-        {
-
-        }
-        else if (option.equals("4"))
-        {
-
-        }
-        else if (option.equals("5"))
-        {
-
-        }
-        else if (option.equals("6"))
+        else if (option.equals("p"))
         {
 
         }
@@ -76,13 +87,20 @@ public class Interface {
             }
         }
         if (account != null){
-            System.out.println("Hello " + account.getName() + "! \n Please enter your password");
+            System.out.println("Hello " + account.getName() + "! \nPlease enter your password");
             userChoice = s.nextLine();
             String password = userChoice;
-            while (account.getPassword().equals(password)){
-                int count = 0;
+            int count = 0;
+            while (!(account.getPassword().equals(password))){
                 count++;
                 System.out.println("Attempt #" + count);
+                userChoice = s.nextLine();
+                password = userChoice;
+                if (count > 2){
+                    System.out.println("Max attempts, you can try again later\n");
+                    start();
+                    break;
+                }
             }
             account.setLoggedIn(true);
             run();
@@ -100,22 +118,58 @@ public class Interface {
         int age;
 
         Scanner s = new Scanner(System.in);
-        System.out.println("Please enter your NAME");
+        System.out.print("Please enter your NAME: ");
         String userChoice = s.nextLine();
         name = userChoice;
-        System.out.println("Please enter your EMAIL");
+        System.out.print("Please enter your EMAIL: ");
         userChoice = s.nextLine();
         email = userChoice;
-        System.out.println("Please enter your PASSWORD");
+        System.out.print("Please enter your PASSWORD: ");
         userChoice = s.nextLine();
         password = userChoice;
-        System.out.println("Please enter your AGE");
+        System.out.print("Please enter your AGE: ");
         userChoice = s.nextLine();
         age = Integer.parseInt(userChoice);
-        User account = new User(name, email, password, age, null, null ,null, null);
-        System.out.println("SUCCESSFULLY CREATED");
+        User account = new User(name, email, password, age);
+        System.out.println("SUCCESSFULLY CREATED\n");
         account.setLoggedIn(true);
         accounts.add(account);
+        user = account;
         run();
+    }
+
+    public void feed(){
+        System.out.println("Welcome to the feed");
+        Scanner s = new Scanner(System.in);
+        System.out.println("1) Post");
+        System.out.println("2) View");
+        System.out.println("3) Return menu");
+        String userChoice = s.nextLine();
+
+        while (!(userChoice.equals("3"))){
+            System.out.println("1) Post");
+            System.out.println("2) View");
+            System.out.println("3) Return menu");
+            userChoice = s.nextLine();
+
+            if (userChoice.equals("1")){
+                System.out.println("Speak your mind: ");
+                String post = userChoice = s.nextLine();
+                activeFeed.add(post);
+                user.getFeedHistory().add(post);
+            }
+            if (userChoice.equals("2")){
+                if (activeFeed == null){
+                    System.out.println("The feed is empty :/");
+                }
+                else
+                {
+                    for (String post : activeFeed) {
+                        System.out.println("- " + post + " by: " + user.getName());
+                    }
+                }
+            }
+        }
+
     }
 }
