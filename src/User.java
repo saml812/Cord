@@ -6,10 +6,28 @@ public class User {
     private String password;
     private int age;
     private ArrayList<User> friends;
+    private ArrayList<User> incomingRequests;
+    private ArrayList<User> outgoingRequests;
     private ArrayList<String> textHistory;
     private ArrayList<String> hobbies;
     private ArrayList<String> feedHistory;
     private boolean loggedIn;
+
+    public ArrayList<User> getIncomingRequests() {
+        return incomingRequests;
+    }
+
+    public void setIncomingRequests(ArrayList<User> incomingRequests) {
+        this.incomingRequests = incomingRequests;
+    }
+
+    public ArrayList<User> getOutgoingRequests() {
+        return outgoingRequests;
+    }
+
+    public void setOutgoingRequests(ArrayList<User> outgoingRequests) {
+        this.outgoingRequests = outgoingRequests;
+    }
 
     public User(String name, String email, String password, int age){
         this.name = name;
@@ -20,6 +38,8 @@ public class User {
         textHistory = new ArrayList<String>();
         hobbies = new ArrayList<String>();
         feedHistory = new ArrayList<String>();
+        incomingRequests = new ArrayList<User>();
+        outgoingRequests = new ArrayList<User>();
         loggedIn = false;
     }
 
