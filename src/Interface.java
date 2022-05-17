@@ -267,10 +267,43 @@ public class Interface {
                 messageOption = choice + "";
                 if (choice != count){
                     selectedProfile = user.getFriends().get(choice-1);
+                    System.out.println("------------ " + selectedProfile.getName() + "'s messages ----------");
+                    for (int i = 0; i < user.getTextHistory().size(); i++){
+                        String between = user.getTextHistory().get(i).substring(user.getTextHistory().get(i).indexOf("|")+1);
+                        if (between.equals(user.getName() + "|" + selectedProfile.getName()) || between.equals(selectedProfile.getName() + "|" + user.getName())){
+                            if (between.substring(0,between.indexOf("|")).equals(user.getName())){
+                                System.out.println("   " + user.getTextHistory().get(i).substring(0,user.getTextHistory().get(i).indexOf("|")) + "<--");
+                            }
+                            else
+                            {
+                                System.out.println("-->" + user.getTextHistory().get(i).substring(0,user.getTextHistory().get(i).indexOf("|")));
+                            }
+                        }
+                    }
+                    String option = "";
+                    while (!(option.equals("2"))){
+                        System.out.println(" ");
+                        System.out.println("1) Respond");
+                        System.out.println("2) Go back");
+                        System.out.print("Enter choice: ");
+                        option = s.nextLine();
+
+                        if (option.equals("1")){
+                            System.out.print("Type here: ");
+                            String comment = s.nextLine();
+                            user.getTextHistory().add(comment + "|" + user.getName() + "|" + selectedProfile.getName());
+                            selectedProfile.getTextHistory().add(comment + "|" + user.getName() + "|" + selectedProfile.getName());
+                        }
+                        else if (!(option.equals("2")))
+                        {
+                            System.out.println("Invalid Choice");
+                        }
+                    }
                 }
             }
         }
     }
+
     public void profiles(){
         String profileOption = "";
         Scanner s = new Scanner(System.in);

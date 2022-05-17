@@ -32,6 +32,10 @@ public class Saver {
                 userData += hobbies + "|" + friends + "|" + comment + "\n";
                 myWriter.write(userData);
             }
+
+            for (String feedComment : activeFeed){
+                String feed = "Feed|" + feedComment + "\n";
+            }
             myWriter.close();
 
         } catch (IOException e) {

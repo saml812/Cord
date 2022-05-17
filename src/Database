@@ -1,1 +1,3 @@
-User|bob|lee|word|2|||
+User|bob|lee|word|2||john|
+User|joe|mama|word|2||john|
+User|john|doe|word|2||bob,joe|
