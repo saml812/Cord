@@ -545,7 +545,7 @@ public class Interface {
                                 }
                             }
                         }
-                        else
+                        else if (!(profileOption.equals("2")))
                         {
                             System.out.println("Invalid Choice");
                         }
