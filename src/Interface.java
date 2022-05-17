@@ -247,7 +247,7 @@ public class Interface {
             Scanner s = new Scanner(System.in);
             int count = 0;
 
-            while (!(messageOption.equals(count))) {
+            while (!(messageOption.equals(Integer.toString(count)))) {
                 System.out.println();
                 for (int i = 0; i < user.getFriends().size(); i++)
                 {
@@ -264,7 +264,7 @@ public class Interface {
                 System.out.print("Enter choice: ");
                 int choice = s.nextInt();
                 s.nextLine();
-                messageOption = Integer.toString(choice);
+                messageOption = choice + "";
                 if (choice != count){
                     selectedProfile = user.getFriends().get(choice-1);
                 }
