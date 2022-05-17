@@ -31,8 +31,8 @@ public class Saver {
                 }
                 userData += hobbies + "|" + friends + "|" + comment + "\n";
                 myWriter.write(userData);
-                myWriter.close();
             }
+            myWriter.close();
 
         } catch (IOException e) {
             System.out.println("An error occurred.");

@@ -128,7 +128,7 @@ public class User {
             for (String hobby : getHobbies()){
                 Hobbies += hobby + ", ";
             }
-            Hobbies.substring(0,Hobbies.length()-3);
+            Hobbies.substring(0,Hobbies.length()-2);
         }
         System.out.println(Hobbies);
         String Friends = "Friends: ";
@@ -140,7 +140,7 @@ public class User {
             for (User friend : getFriends()){
                 Friends += friend.getName() + ", ";
             }
-            Friends.substring(0,Friends.length()-3);
+            Friends.substring(0,Friends.length()-2);
         }
         System.out.println(Friends);
     }

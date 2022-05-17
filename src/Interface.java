@@ -230,8 +230,11 @@ public class Interface {
                     System.out.println("The feed is empty :/");
                 }
             }
+            else
+            {
+                System.out.println("Invalid Choice");
+            }
         }
-
     }
 
     public void directMessages(){
@@ -242,8 +245,9 @@ public class Interface {
         {
             String messageOption = "";
             Scanner s = new Scanner(System.in);
+            int count = 0;
 
-            while (!(messageOption.equals("e"))) {
+            while (!(messageOption.equals(count))) {
                 System.out.println();
                 for (int i = 0; i < user.getFriends().size(); i++)
                 {
@@ -253,16 +257,20 @@ public class Interface {
                     int choiceNum = i + 1;
 
                     System.out.println("" + choiceNum + ") " + friend);
+                    count = choiceNum;
                 }
-                System.out.println("- (e)xit");
+                count += 1;
+                System.out.println(count + ") Go back");
                 System.out.print("Enter choice: ");
                 int choice = s.nextInt();
                 s.nextLine();
+                messageOption = Integer.toString(choice);
+                if (choice != count){
+                    selectedProfile = user.getFriends().get(choice-1);
+                }
             }
         }
-
     }
-
     public void profiles(){
         String profileOption = "";
         Scanner s = new Scanner(System.in);
@@ -292,7 +300,7 @@ public class Interface {
                         for (String hobby : user.getHobbies()){
                             Hobbies += hobby + ", ";
                         }
-                        Hobbies = Hobbies.substring(0,Hobbies.length()-3);
+                        Hobbies = Hobbies.substring(0,Hobbies.length()-2);
                     }
                     System.out.println(Hobbies);
                     String Friends = "Friends: ";
@@ -304,7 +312,7 @@ public class Interface {
                         for (User friend : user.getFriends()){
                             Friends += friend.getName() + ", ";
                         }
-                        Friends = Friends.substring(0,Friends.length()-3);
+                        Friends = Friends.substring(0,Friends.length()-2);
                     }
                     System.out.println(Friends);
                     System.out.println();
@@ -375,40 +383,61 @@ public class Interface {
                                 user.getHobbies().remove(choice-1);
                                 System.out.println("The hobby has been removed");
                             }
+                            else
+                            {
+                                System.out.println("Invalid Choice");
+                            }
                         }
                     }
                     else if (profileOption.equals("6")){
                         System.out.println();
                         System.out.println("------------ Incoming requests ----------");
-                        for (int i = 0; i < user.getIncomingRequests().size(); i++)
-                        {
-                            String name = user.getIncomingRequests().get(i).getName();
-
-                            // this will print index 0 as choice 1 in the results list; better for user!
-                            int choiceNum = i + 1;
-
-                            System.out.println("" + choiceNum + ") " + name);
+                        if (user.getIncomingRequests().size() == 0){
+                            System.out.println("You have no incoming requests");
                         }
-                        System.out.print("Enter choice: ");
-                        int choice = s.nextInt();
-                        s.nextLine();
+                        else
+                        {
+                            for (int i = 0; i < user.getIncomingRequests().size(); i++)
+                            {
+                                String name = user.getIncomingRequests().get(i).getName();
 
-                        if (!(choice == user.getIncomingRequests().size()+1)){
-                            selectedProfile = user.getIncomingRequests().get(choice-1);
-                            System.out.println();
-                            System.out.println("1) Accept");
-                            System.out.println("2) Decline");
+                                // this will print index 0 as choice 1 in the results list; better for user!
+                                int choiceNum = i + 1;
+
+                                System.out.println("" + choiceNum + ") " + name);
+                            }
                             System.out.print("Enter choice: ");
-                            profileOption = s.nextLine();
-                            if (profileOption.equals("1")){
-                                System.out.println("You have added " + selectedProfile.getName() + " to your list");
-                                user.getFriends().add(selectedProfile);
-                            } else if (profileOption.equals("2")){
-                                System.out.println("You have declined " + selectedProfile.getName());
-                                selectedProfile.getOutgoingRequests().remove(user);
-                                user.getIncomingRequests().remove(selectedProfile);
+                            int choice = s.nextInt();
+                            s.nextLine();
+
+                            if (!(choice == user.getIncomingRequests().size()+1)){
+                                selectedProfile = user.getIncomingRequests().get(choice-1);
+                                System.out.println();
+                                System.out.println("1) Accept");
+                                System.out.println("2) Decline");
+                                System.out.print("Enter choice: ");
+                                profileOption = s.nextLine();
+                                if (profileOption.equals("1")){
+                                    System.out.println("You have added " + selectedProfile.getName() + " to your list");
+                                    user.getFriends().add(selectedProfile);
+                                    selectedProfile.getFriends().add(user);
+                                    selectedProfile.getOutgoingRequests().remove(user);
+                                    user.getIncomingRequests().remove(selectedProfile);
+                                } else if (profileOption.equals("2")){
+                                    System.out.println("You have declined " + selectedProfile.getName());
+                                    selectedProfile.getOutgoingRequests().remove(user);
+                                    user.getIncomingRequests().remove(selectedProfile);
+                                }
+                            }
+                            else
+                            {
+                                System.out.println("Invalid Choice");
                             }
                         }
+                    }
+                    else
+                    {
+                        System.out.println("Invalid Choice");
                     }
                 }
             }
@@ -481,12 +510,18 @@ public class Interface {
                                 else {
                                     System.out.println("You're already friends with " + selectedProfile.getName());
                                 }
-                                System.out.println(added);
-                                System.out.println(sent);
                             }
+                        }
+                        else
+                        {
+                            System.out.println("Invalid Choice");
                         }
                     }
                 }
+            }
+            else
+            {
+                System.out.println("Invalid Choice");
             }
         }
     }
