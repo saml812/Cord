@@ -2,6 +2,7 @@ import com.sun.net.httpserver.Authenticator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.Array;
 import java.util.*;
 public class Interface {
     ArrayList<User> accounts = new ArrayList<User>();
@@ -9,8 +10,49 @@ public class Interface {
     User user = null;
     User selectedProfile = null;
 
-    public void start(){
+    public void loadData() throws FileNotFoundException{
+        File myObj = new File("src/Database");
+        Scanner myReader = new Scanner(myObj);
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine();
+            if (data.contains("User")){
+                String[] userData = data.split("\\|");
+                ArrayList<String> hobbies = new ArrayList<String>();
+                ArrayList<User> friends = new ArrayList<User>();
+                ArrayList<String> textHistory = new ArrayList<String>();
+                ArrayList<String> feedHistory = new ArrayList<String>();
+                ArrayList<User> incomingRequests = new ArrayList<User>();
+                ArrayList<User> outgoingRequests = new ArrayList<User>();
 
+                String[] hobbyList = userData[5].split("\\,");
+                if (userData[5].length() > 0){
+                    for (int i = 0; i < hobbyList.length; i++){
+                        hobbies.add(hobbyList[i]);
+                    }
+                }
+
+                String[] feedTexts = userData[7].split("\\/");
+                if (userData[7].length() > 0){
+                    for (int i = 0; i < feedTexts.length; i++){
+                        feedHistory.add(feedTexts[i]);
+                    }
+                }
+
+                User newProfile = new User(userData[1], userData[2], userData[3], Integer.parseInt(userData[4]), hobbies, feedHistory);
+                accounts.add(newProfile);
+            }
+            if (data.contains("Feed")){
+                String[] driveData = data.split("\\|");
+                activeFeed.add(driveData[1]);
+            }
+        }
+        System.out.println("-Data Loaded-");
+        myReader.close();
+    }
+
+    public void start() throws FileNotFoundException {
+
+        loadData();
         Scanner s = new Scanner(System.in);
         System.out.println("Welcome to Cord!");
         System.out.println("1) Sign in");
@@ -31,7 +73,7 @@ public class Interface {
         }
     }
 
-    public void run(){
+    public void run() throws FileNotFoundException {
         for (User account : accounts){
             if (account.isLoggedIn()){
                 user = account;
@@ -84,7 +126,7 @@ public class Interface {
         }
     }
 
-    public void signIn(){
+    public void signIn() throws FileNotFoundException {
         System.out.println("Please enter your email");
         Scanner s = new Scanner(System.in);
         String userChoice = s.nextLine();
@@ -120,7 +162,7 @@ public class Interface {
         }
     }
 
-    public void signUp(){
+    public void signUp() throws FileNotFoundException {
         String name;
         String email;
         String password;
@@ -207,6 +249,7 @@ public class Interface {
             if (feedOption.equals("1")){
                 System.out.print("Speak your mind: ");
                 String post = feedOption = s.nextLine();
+                post += "/ " + user.getName();
                 activeFeed.add(post);
                 user.getFeedHistory().add(post);
             }
@@ -218,7 +261,7 @@ public class Interface {
                         for (User account : accounts){
                             for (int i = 0; i < account.getFeedHistory().size(); i++){
                                 if (account.getFeedHistory().get(i).equals(post)){
-                                    System.out.println("- " + post + " by: " + account.getName());
+                                    System.out.println("- " + post.substring(0, post.indexOf(account.getName())-2) + " by: " + account.getName());
                                 }
                             }
                         }
@@ -269,14 +312,14 @@ public class Interface {
                     selectedProfile = user.getFriends().get(choice-1);
                     System.out.println("------------ " + selectedProfile.getName() + "'s messages ----------");
                     for (int i = 0; i < user.getTextHistory().size(); i++){
-                        String between = user.getTextHistory().get(i).substring(user.getTextHistory().get(i).indexOf("|")+1);
-                        if (between.equals(user.getName() + "|" + selectedProfile.getName()) || between.equals(selectedProfile.getName() + "|" + user.getName())){
-                            if (between.substring(0,between.indexOf("|")).equals(user.getName())){
-                                System.out.println("   " + user.getTextHistory().get(i).substring(0,user.getTextHistory().get(i).indexOf("|")) + "<--");
+                        String between = user.getTextHistory().get(i).substring(user.getTextHistory().get(i).indexOf("/")+1);
+                        if (between.equals(user.getName() + "/" + selectedProfile.getName()) || between.equals(selectedProfile.getName() + "/" + user.getName())){
+                            if (between.substring(0,between.indexOf("/")).equals(user.getName())){
+                                System.out.println("   " + user.getTextHistory().get(i).substring(0,user.getTextHistory().get(i).indexOf("/")) + "<--");
                             }
                             else
                             {
-                                System.out.println("-->" + user.getTextHistory().get(i).substring(0,user.getTextHistory().get(i).indexOf("|")));
+                                System.out.println("-->" + user.getTextHistory().get(i).substring(0,user.getTextHistory().get(i).indexOf("/")));
                             }
                         }
                     }
@@ -291,8 +334,8 @@ public class Interface {
                         if (option.equals("1")){
                             System.out.print("Type here: ");
                             String comment = s.nextLine();
-                            user.getTextHistory().add(comment + "|" + user.getName() + "|" + selectedProfile.getName());
-                            selectedProfile.getTextHistory().add(comment + "|" + user.getName() + "|" + selectedProfile.getName());
+                            user.getTextHistory().add(comment + "/" + user.getName() + "/" + selectedProfile.getName());
+                            selectedProfile.getTextHistory().add(comment + "/" + user.getName() + "/" + selectedProfile.getName());
                         }
                         else if (!(option.equals("2")))
                         {

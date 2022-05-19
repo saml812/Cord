@@ -24,18 +24,27 @@ public class Saver {
                 }
                 String comment = "";
                 for (String feed : account.getFeedHistory()){
-                    comment += feed + ",";
+                    comment += feed + "/";
                 }
                 if (comment.length() > 0){
                     comment = comment.substring(0, comment.length()-1);
                 }
-                userData += hobbies + "|" + friends + "|" + comment + "\n";
+                String userText = "";
+                for (String privateMessage : account.getTextHistory()){
+                    userText += privateMessage + ",";
+                }
+                if (userText.length() > 0){
+                    userText = userText.substring(0, userText.length()-1);
+                }
+                userData += hobbies + "|" + friends + "|" + comment + "|" + userText + "\n";
                 myWriter.write(userData);
             }
 
             for (String feedComment : activeFeed){
                 String feed = "Feed|" + feedComment + "\n";
+                myWriter.write(feed);
             }
+
             myWriter.close();
 
         } catch (IOException e) {

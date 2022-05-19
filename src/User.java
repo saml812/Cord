@@ -43,6 +43,20 @@ public class User {
         loggedIn = false;
     }
 
+    public User(String name, String email, String password, int age, ArrayList<String> hobbies, ArrayList<String> feedHistory){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.age = age;
+        friends = new ArrayList<User>();
+        textHistory = new ArrayList<String>();
+        this.hobbies = hobbies;
+        this.feedHistory = feedHistory;
+        incomingRequests = new ArrayList<User>();
+        outgoingRequests = new ArrayList<User>();
+        loggedIn = false;
+    }
+
     public String getName() {
         return name;
     }
