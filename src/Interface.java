@@ -24,35 +24,36 @@ public class Interface {
                 ArrayList<User> incomingRequests = new ArrayList<User>();
                 ArrayList<User> outgoingRequests = new ArrayList<User>();
 
-                String[] hobbyList = userData[5].split("\\,");
-                if (userData[5].length() > 0){
-                    for (int i = 0; i < hobbyList.length; i++){
+                if (!(userData[5].equals("null"))) {
+                    String[] hobbyList = userData[5].split(",");
+                    for (int i = 0; i < hobbyList.length; i++) {
                         hobbies.add(hobbyList[i]);
                     }
                 }
 
-                String[] feedTexts = userData[7].split("\\/");
-                if (userData[7].length() > 0){
-                    for (int i = 0; i < feedTexts.length; i++){
+                if (!(userData[7].equals("null"))) {
+                    String[] feedTexts = userData[7].split("/");
+                    for (int i = 0; i < feedTexts.length; i++) {
                         feedHistory.add(feedTexts[i]);
                     }
                 }
 
                 User newProfile = new User(userData[1], userData[2], userData[3], Integer.parseInt(userData[4]), hobbies, feedHistory);
                 accounts.add(newProfile);
+                System.out.println(newProfile.getFeedHistory().get(0));
             }
             if (data.contains("Feed")){
                 String[] driveData = data.split("\\|");
                 activeFeed.add(driveData[1]);
+                System.out.println(activeFeed);
             }
+
+
         }
-        System.out.println("-Data Loaded-");
         myReader.close();
     }
 
     public void start() throws FileNotFoundException {
-
-        loadData();
         Scanner s = new Scanner(System.in);
         System.out.println("Welcome to Cord!");
         System.out.println("1) Sign in");
@@ -100,9 +101,9 @@ public class Interface {
         }
         if (menuOption.equals("s")){
             System.out.println();
-           user.setLoggedIn(false);
-           user = null;
-           start();
+            user.setLoggedIn(false);
+            user = null;
+            start();
         }
     }
 
@@ -249,7 +250,7 @@ public class Interface {
             if (feedOption.equals("1")){
                 System.out.print("Speak your mind: ");
                 String post = feedOption = s.nextLine();
-                post += "/ " + user.getName();
+                post += "~ " + user.getName();
                 activeFeed.add(post);
                 user.getFeedHistory().add(post);
             }

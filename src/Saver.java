@@ -15,6 +15,7 @@ public class Saver {
                 if (hobbies.length() > 0){
                     hobbies = hobbies.substring(0, hobbies.length()-1);
                 }
+
                 String friends = "";
                 for (User friend : account.getFriends()){
                     friends += friend.getName() + ",";
@@ -22,6 +23,7 @@ public class Saver {
                 if (friends.length() > 0){
                     friends = friends.substring(0, friends.length()-1);
                 }
+
                 String comment = "";
                 for (String feed : account.getFeedHistory()){
                     comment += feed + "/";
@@ -29,12 +31,26 @@ public class Saver {
                 if (comment.length() > 0){
                     comment = comment.substring(0, comment.length()-1);
                 }
+
                 String userText = "";
                 for (String privateMessage : account.getTextHistory()){
                     userText += privateMessage + ",";
                 }
                 if (userText.length() > 0){
                     userText = userText.substring(0, userText.length()-1);
+                }
+
+                if (hobbies.length() < 1){
+                    hobbies = "null";
+                }
+                if (friends.length() < 1){
+                    friends = "null";
+                }
+                if (comment.length() < 1){
+                    comment = "null";
+                }
+                if (userText.length() < 1){
+                    userText = "null";
                 }
                 userData += hobbies + "|" + friends + "|" + comment + "|" + userText + "\n";
                 myWriter.write(userData);
