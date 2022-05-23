@@ -4,9 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginPage extends JFrame{
-    private JTextField email;
+    private JTextField femail;
     private JPanel panel1;
-    private JPasswordField password;
+    private JPasswordField fpassword;
     private JButton logIn;
     private JButton signUp;
     private JFrame frame;
@@ -30,5 +30,20 @@ public class LoginPage extends JFrame{
         });
 
 
+        logIn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loginUser();
+            }
+        });
+    }
+
+    public void loginUser(){
+        String email = femail.getText();
+        String password = String.valueOf(fpassword.getPassword());
+        if (email.isEmpty() || password.isEmpty()){
+            JOptionPane.showMessageDialog(this, "Please enter all fields", "Try again", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
     }
 }
