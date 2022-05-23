@@ -11,9 +11,10 @@ public class SignupPage extends JFrame{
     private JButton goBackButton;
     private JButton createButton;
     private JFrame frame;
-    private Data server = new Data();
+    private Data server;
 
-    public SignupPage() {
+    public SignupPage(Data server) {
+        this.server = server;
         frame = new JFrame("Welcome");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500, 500));
@@ -27,7 +28,7 @@ public class SignupPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                new LoginPage().setVisible(true);
+                new LoginPage(server);
             }
         });
 
@@ -58,7 +59,10 @@ public class SignupPage extends JFrame{
             }
         }
         User newProfile = new User(name, email, password);
-        server.getAccounts().add(newProfile);
+        newProfile.setLoggedIn(true);
+        this.server.getAccounts().add(newProfile);
+        frame.dispose();
+        new Dashboard(server);
     }
 }
 
