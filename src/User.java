@@ -13,6 +13,20 @@ public class User {
     private ArrayList<String> feedHistory;
     private boolean loggedIn;
 
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        age = 0;
+        friends = new ArrayList<User>();
+        textHistory = new ArrayList<String>();
+        hobbies = new ArrayList<String>();
+        feedHistory = new ArrayList<String>();
+        incomingRequests = new ArrayList<User>();
+        outgoingRequests = new ArrayList<User>();
+        loggedIn = false;
+    }
+
     public ArrayList<User> getIncomingRequests() {
         return incomingRequests;
     }
