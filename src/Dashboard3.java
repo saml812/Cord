@@ -4,6 +4,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class Dashboard3 extends JFrame{
     private JPanel panel1;
@@ -21,7 +22,6 @@ public class Dashboard3 extends JFrame{
     private JPanel UserProfile;
     private JPanel SearchProfiles;
     private JTextField searchedUser;
-    private JPanel SearchedProfile;
     private JTextField changeUsername;
     private JTextField changeEmail;
     private JPasswordField changePassword;
@@ -32,14 +32,13 @@ public class Dashboard3 extends JFrame{
     private JLabel displayUsername;
     private JTextArea friendList;
     private JTextArea hobbyList;
-    private JTextArea searchedUser_hobbyList;
-    private JTextArea searchedUser_friendList;
-    private JLabel searchedUsername;
-    private JLabel searchedUseremail;
-    private JLabel searchedUserage;
+    private JTextField deleteHobby;
+    private JPanel searchResults;
+    private JPanel selectedProfile;
     private JFrame frame;
     private User account = null;
     private Data server;
+    private JLabel noResults;
 
     public Dashboard3(Data server) {
         this.server = server;
@@ -120,7 +119,12 @@ public class Dashboard3 extends JFrame{
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
                     String newName = changeUsername.getText();
-                    account.setName(newName);
+                    if (newName.equals("")){
+                        errorMessage_NONAME();
+                    }
+                    else{
+                        account.setName(newName);
+                    }
                     displayUsername.setText("Username: " + account.getName());
                     displayEmail.setText("Email: " + account.getEmail());
                     displayPassword.setText("Password: " + account.getPassword());
@@ -135,7 +139,12 @@ public class Dashboard3 extends JFrame{
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
                     String newEmail = changeEmail.getText();
-                    account.setEmail(newEmail);
+                    if (newEmail.equals("")){
+                        errorMessage_NOEMAIL();
+                    }
+                    else{
+                        account.setEmail(newEmail);
+                    }
                     displayUsername.setText("Username: " + account.getName());
                     displayEmail.setText("Email: " + account.getEmail());
                     displayPassword.setText("Password: " + account.getPassword());
@@ -150,7 +159,12 @@ public class Dashboard3 extends JFrame{
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
                     String newPassword = String.valueOf(changePassword.getPassword());
-                    account.setPassword(newPassword);
+                    if (newPassword.equals("")){
+                        errorMessage_NOPASSWORD();
+                    }
+                    else{
+                        account.setPassword(newPassword);
+                    }
                     displayUsername.setText("Username: " + account.getName());
                     displayEmail.setText("Email: " + account.getEmail());
                     displayPassword.setText("Password: " + account.getPassword());
@@ -165,7 +179,12 @@ public class Dashboard3 extends JFrame{
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
                     String newAge = changeAge.getText();
-                    account.setAge(Integer.parseInt(newAge));
+                    if (newAge.equals("")){
+                        errorMessage_NOAGE();
+                    }
+                    else{
+                        account.setAge(Integer.parseInt(newAge));
+                    }
                     displayUsername.setText("Username: " + account.getName());
                     displayEmail.setText("Email: " + account.getEmail());
                     displayPassword.setText("Password: " + account.getPassword());
@@ -179,26 +198,50 @@ public class Dashboard3 extends JFrame{
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
-                    String[] lines = hobbyList.getText().split("\\n");
-
-                    account.getHobbies().add(hobbyList.getText());
-                    updateHobbies();
+                    String[] lines = hobbyList.getText().split("\n");
+                    if (lines[lines.length-1].equals("")){
+                        errorMessage_NOHOBBY();
+                    }
+                    else{
+                        account.getHobbies().add(lines[lines.length-1]);
+                        hobbyList.selectAll();
+                        hobbyList.replaceSelection("");
+                        updateHobbies();
+                    }
                 }
             }
         });
 
-        hobbyList.addKeyListener(new KeyAdapter() {
+        deleteHobby.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
-                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE){
-                    for (int i = 0; i < account.getHobbies().size(); i++){
-                        if (account.getHobbies().get(i).equals(hobbyList.getText())){
-                            account.getHobbies().remove(i);
-                            i--;
-                        }
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    String hobbyRemove = deleteHobby.getText();
+                    deleteHobby.setText("");
+                    if (hobbyRemove.equals("")){
+                        errorMessage_NOHOBBY();
                     }
-                    updateHobbies();
+                    else{
+                        removeHobbies(hobbyRemove);
+                    }
+                }
+            }
+        });
+
+        searchedUser.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    String userName = searchedUser.getText();
+                    searchedUser.setText("");
+                    if (userName.equals("")){
+                        errorMessage_NONAME();
+                    }
+                    else{
+                        displayResults(userName);
+                    }
                 }
             }
         });
@@ -218,15 +261,78 @@ public class Dashboard3 extends JFrame{
     }
 
     public void updateHobbies(){
-        hobbyList.selectAll();
-        hobbyList.replaceSelection("");
         if (account.getHobbies().size() > 0){
             for (int i = 0; i < account.getHobbies().size(); i++){
-                hobbyList.append(i+1 + ". " + account.getHobbies().get(i) + "\n");
+                hobbyList.append(account.getHobbies().get(i) + "\n");
             }
         }
         else {
-            friendList.append("You have no hobbies");
+            hobbyList.append("You have no hobbies");
         }
     }
+
+    public void removeHobbies(String removeHobby){
+        if (!(account.getHobbies().contains(removeHobby))){
+            JOptionPane.showMessageDialog(this, "This hobby does not exist", "Try again", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else{
+            for (int i = 0; i < account.getHobbies().size(); i++){
+                if (removeHobby.equals(account.getHobbies().get(i))){
+                    account.getHobbies().remove(i);
+                    i--;
+                }
+            }
+            hobbyList.selectAll();
+            hobbyList.replaceSelection("");
+            updateHobbies();
+        }
+    }
+
+    public void displayResults(String userName){
+        ArrayList<User> searchedProfiles = new ArrayList<User>();
+        for (int i = 0; i < server.getAccounts().size(); i++)
+        {
+            String profileName = server.getAccounts().get(i).getName();
+            profileName = profileName.toLowerCase();
+
+            if (profileName.contains(userName))
+            {
+                searchedProfiles.add(server.getAccounts().get(i));
+            }
+        }
+
+        noResults = new JLabel("");
+        noResults.setText("No usernames found");
+        if (searchedProfiles.size() == 0){
+            searchResults.add(noResults);
+        }
+    }
+
+
+    public void errorMessage_NOHOBBY(){
+        JOptionPane.showMessageDialog(this, "Please enter a hobby", "Try again", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    public void errorMessage_NONAME(){
+        JOptionPane.showMessageDialog(this, "Please enter a username", "Try again", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    public void errorMessage_NOEMAIL(){
+        JOptionPane.showMessageDialog(this, "Please enter a email", "Try again", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    public void errorMessage_NOPASSWORD(){
+        JOptionPane.showMessageDialog(this, "Please enter a password", "Try again", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    public void errorMessage_NOAGE(){
+        JOptionPane.showMessageDialog(this, "Please enter a age", "Try again", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
 }

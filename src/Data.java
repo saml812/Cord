@@ -76,7 +76,6 @@ public class Data {
             if (data.contains("Feed")){
                 String[] driveData = data.split("\\|");
                 activeFeed.add(driveData[1]);
-                System.out.println(activeFeed);
             }
 
 
