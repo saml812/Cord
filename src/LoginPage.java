@@ -56,6 +56,7 @@ public class LoginPage extends JFrame{
             if (profile.getPassword().equals(password)){
                 profile.setLoggedIn(true);
                 new Dashboard(server);
+                frame.dispose();
             }
             else
             {
