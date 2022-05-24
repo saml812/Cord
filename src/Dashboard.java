@@ -19,6 +19,7 @@ public class Dashboard extends JFrame{
     private JFrame frame;
     private User account = null;
     private Data server;
+    private JLabel errorMessage;
 
     public Dashboard(Data server) {
         this.server = server;
@@ -37,6 +38,13 @@ public class Dashboard extends JFrame{
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         displayName.setText("Hello " + account.getName());
+
+        if (account.getAge() == 0){
+            errorMessage.setText("Please set your age before signing out");
+        }
+        else{
+            errorMessage.setText("");
+        }
 
         Feed.addMouseListener(new MouseAdapter() {
             @Override
