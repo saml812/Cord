@@ -5,6 +5,8 @@ public class Main {
 
 
         Data server = new Data();
+        server.loadData();
+
         new LoginPage(server);
 
         //Interface Cord = new Interface();

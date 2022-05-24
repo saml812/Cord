@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Dashboard extends JFrame{
+public class Dashboard3 extends JFrame{
     private JPanel panel1;
     private JLabel displayName;
     private JLabel Feed;
@@ -20,7 +20,7 @@ public class Dashboard extends JFrame{
     private User account = null;
     private Data server;
 
-    public Dashboard(Data server) {
+    public Dashboard3(Data server) {
         this.server = server;
         for (User user :  this.server.getAccounts()){
             if (user.isLoggedIn()){
