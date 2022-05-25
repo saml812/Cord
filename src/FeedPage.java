@@ -21,8 +21,6 @@ public class FeedPage extends JFrame{
     private JTextField feedText;
     private JTextArea FeedBox;
     private JPanel FeedPanel;
-    private JLabel PADDING1;
-    private JLabel PADDING2;
     private JFrame frame;
     private User account = null;
     private ServerData server;
@@ -44,8 +42,6 @@ public class FeedPage extends JFrame{
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         displayName.setText("Hello " + account.getName());
-        PADDING2.setVisible(false);
-        PADDING1.setVisible(false);
         updateFeed();
 
         Feed.addMouseListener(new MouseAdapter() {
@@ -107,7 +103,7 @@ public class FeedPage extends JFrame{
                     String text = feedText.getText() + "~ " + account.getName();
                     server.getActiveFeed().add(text);
                     account.getFeedHistory().add(text);
-                    FeedBox.append("- " + text.substring(0, text.indexOf(account.getName())-2) + " by: " + account.getName() + "\n");
+                    FeedBox.append("- " + text.substring(0, text.indexOf("~ ")) + " by: " + account.getName() + "\n");
                     feedText.setText("");
                 }
             }
@@ -121,7 +117,7 @@ public class FeedPage extends JFrame{
                 for (User account : server.getAccounts()){
                     for (int i = 0; i < account.getFeedHistory().size(); i++){
                         if (account.getFeedHistory().get(i).equals(post)){
-                            FeedBox.append("- " + post.substring(0, post.indexOf(account.getName())-2) + " by: " + account.getName() + "\n");
+                            FeedBox.append("- " + post.substring(0, post.indexOf("~ ")) + " by: " + account.getName() + "\n");
                         }
                     }
                 }
