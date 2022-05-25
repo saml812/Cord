@@ -21,6 +21,8 @@ public class FeedPage extends JFrame{
     private JTextField feedText;
     private JTextArea FeedBox;
     private JPanel FeedPanel;
+    private JLabel PADDING1;
+    private JLabel PADDING2;
     private JFrame frame;
     private User account = null;
     private ServerData server;
@@ -42,6 +44,8 @@ public class FeedPage extends JFrame{
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         displayName.setText("Hello " + account.getName());
+        PADDING2.setVisible(false);
+        PADDING1.setVisible(false);
         updateFeed();
 
         Feed.addMouseListener(new MouseAdapter() {
