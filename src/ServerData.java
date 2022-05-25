@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Data {
+public class ServerData {
     ArrayList<User> accounts = new ArrayList<User>();
     ArrayList<String> activeFeed = new ArrayList<String>();
     User user = null;
@@ -42,6 +42,7 @@ public class Data {
     }
 
     public void loadData() throws FileNotFoundException {
+
         File myObj = new File("src/Database");
         Scanner myReader = new Scanner(myObj);
         while (myReader.hasNextLine()) {
@@ -49,11 +50,8 @@ public class Data {
             if (data.contains("User")){
                 String[] userData = data.split("\\|");
                 ArrayList<String> hobbies = new ArrayList<String>();
-                ArrayList<User> friends = new ArrayList<User>();
                 ArrayList<String> textHistory = new ArrayList<String>();
                 ArrayList<String> feedHistory = new ArrayList<String>();
-                ArrayList<User> incomingRequests = new ArrayList<User>();
-                ArrayList<User> outgoingRequests = new ArrayList<User>();
 
                 if (!(userData[5].equals("null"))) {
                     String[] hobbyList = userData[5].split(",");
@@ -69,16 +67,50 @@ public class Data {
                     }
                 }
 
-                User newProfile = new User(userData[1], userData[2], userData[3], Integer.parseInt(userData[4]), hobbies, feedHistory);
+                if (!(userData[8].equals("null"))) {
+                    String[] privateTexts = userData[8].split("\\\\");
+                    for (int i = 0; i < privateTexts.length; i++) {
+                        textHistory.add(privateTexts[i]);
+                    }
+                }
+
+                User newProfile = new User(userData[1], userData[2], userData[3], Integer.parseInt(userData[4]), hobbies, feedHistory, textHistory);
                 accounts.add(newProfile);
-                System.out.println(newProfile.getFeedHistory().get(0));
             }
+
             if (data.contains("Feed")){
-                String[] driveData = data.split("\\|");
-                activeFeed.add(driveData[1]);
+                String[] feedData = data.split("\\|");
+                activeFeed.add(feedData[1]);
             }
 
+            if (data.contains("Add")){
+                String[] addData = data.split("\\|");
 
+                for (User user : accounts){
+                    if (user.getName().equals(addData[1])){
+                        for (User user1 : accounts){
+                            String[] friendsToAdd = addData[2].split(",");
+                            for (String s : friendsToAdd) {
+                                if (user1.getName().equals(s)) {
+                                    user.getFriends().add(user1);
+                                }
+                            }
+                            String[] incomingRequestsToAdd = addData[3].split(",");
+                            for (String s : incomingRequestsToAdd) {
+                                if (user1.getName().equals(s)) {
+                                    user.getIncomingRequests().add(user1);
+                                }
+                            }
+                            String[] outgoingRequestsToAdd = addData[4].split(",");
+                            for (String s : outgoingRequestsToAdd) {
+                                if (user1.getName().equals(s)) {
+                                    user.getOutgoingRequests().add(user1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         myReader.close();
     }

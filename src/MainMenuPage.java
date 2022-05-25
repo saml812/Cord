@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Dashboard extends JFrame{
+public class MainMenuPage extends JFrame{
     private JPanel panel1;
     private JLabel displayName;
     private JLabel Feed;
@@ -18,10 +18,10 @@ public class Dashboard extends JFrame{
     private JPanel MenuPanel;
     private JFrame frame;
     private User account = null;
-    private Data server;
+    private ServerData server;
     private JLabel errorMessage;
 
-    public Dashboard(Data server) {
+    public MainMenuPage(ServerData server) {
         this.server = server;
         for (User user :  this.server.getAccounts()){
             if (user.isLoggedIn()){
@@ -51,7 +51,7 @@ public class Dashboard extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new Dashboard1(server);
+                new FeedPage(server);
             }
         });
 
@@ -60,7 +60,7 @@ public class Dashboard extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new Dashboard2(server);
+                new MessagesPage(server);
             }
         });
 
@@ -69,7 +69,7 @@ public class Dashboard extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new Dashboard3(server);
+                new ProfilesPage(server);
             }
         });
 
@@ -89,7 +89,7 @@ public class Dashboard extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new Dashboard(server);
+                new MainMenuPage(server);
             }
         });
     }

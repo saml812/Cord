@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class LoginPage extends JFrame{
     private JTextField femail;
@@ -10,10 +12,10 @@ public class LoginPage extends JFrame{
     private JButton logIn;
     private JButton signUp;
     private JFrame frame;
-    private Data server;
+    private ServerData server;
     private User profile = null;
 
-    public LoginPage(Data server){
+    public LoginPage(ServerData server){
         this.server = server;
         frame = new JFrame("Welcome");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -38,6 +40,16 @@ public class LoginPage extends JFrame{
                 loginUser();
             }
         });
+
+        fpassword.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    loginUser();
+                }
+            }
+        });
     }
 
     public void loginUser(){
@@ -55,7 +67,7 @@ public class LoginPage extends JFrame{
         if (profile != null){
             if (profile.getPassword().equals(password)){
                 profile.setLoggedIn(true);
-                new Dashboard(server);
+                new MainMenuPage(server);
                 frame.dispose();
             }
             else

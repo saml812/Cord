@@ -6,7 +6,9 @@ public class Saver {
     public static void writeToFile(ArrayList<User> accounts, ArrayList<String> activeFeed){
         try {
             FileWriter myWriter = new FileWriter("src/Database");
+            ArrayList<String> needAdded = new ArrayList<String>();
             for (User account : accounts){
+                String needAdd = "";
                 String userData = "User|" + account.getName() + "|" + account.getEmail() + "|" + account.getPassword() + "|" + account.getAge() + "|";
                 String hobbies = "";
                 for (String hobby : account.getHobbies()){
@@ -34,10 +36,26 @@ public class Saver {
 
                 String userText = "";
                 for (String privateMessage : account.getTextHistory()){
-                    userText += privateMessage + ",";
+                    userText += privateMessage + "\\";
                 }
                 if (userText.length() > 0){
                     userText = userText.substring(0, userText.length()-1);
+                }
+
+                String incomingRequests = "";
+                for (User friend : account.getIncomingRequests()){
+                    incomingRequests += friend.getName() + ",";
+                }
+                if (incomingRequests.length() > 0){
+                    incomingRequests = incomingRequests.substring(0, incomingRequests.length()-1);
+                }
+
+                String outgoingRequests = "";
+                for (User friend : account.getOutgoingRequests()){
+                    outgoingRequests += friend.getName() + ",";
+                }
+                if (outgoingRequests.length() > 0){
+                    outgoingRequests = outgoingRequests.substring(0, outgoingRequests.length()-1);
                 }
 
                 if (hobbies.length() < 1){
@@ -52,7 +70,15 @@ public class Saver {
                 if (userText.length() < 1){
                     userText = "null";
                 }
-                userData += hobbies + "|" + friends + "|" + comment + "|" + userText + "\n";
+                if (incomingRequests.length() < 1){
+                    incomingRequests = "null";
+                }
+                if (outgoingRequests.length() < 1){
+                    outgoingRequests = "null";
+                }
+                userData += hobbies + "|" + friends + "|" + comment + "|" + userText + "|" + incomingRequests + "|" + outgoingRequests + "\n";
+                needAdd = "Add|" + account.getName() + "|" + friends + "|" + incomingRequests + "|" + outgoingRequests;
+                needAdded.add(needAdd);
                 myWriter.write(userData);
             }
 
@@ -61,6 +87,9 @@ public class Saver {
                 myWriter.write(feed);
             }
 
+            for (String text : needAdded){
+                myWriter.write(text + "\n");
+            }
             myWriter.close();
 
         } catch (IOException e) {

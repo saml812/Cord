@@ -57,13 +57,13 @@ public class User {
         loggedIn = false;
     }
 
-    public User(String name, String email, String password, int age, ArrayList<String> hobbies, ArrayList<String> feedHistory){
+    public User(String name, String email, String password, int age, ArrayList<String> hobbies, ArrayList<String> feedHistory, ArrayList<String> textHistory){
         this.name = name;
         this.email = email;
         this.password = password;
         this.age = age;
         friends = new ArrayList<User>();
-        textHistory = new ArrayList<String>();
+        this.textHistory = textHistory;
         this.hobbies = hobbies;
         this.feedHistory = feedHistory;
         incomingRequests = new ArrayList<User>();

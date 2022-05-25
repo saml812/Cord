@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
 
 
-        Data server = new Data();
+        ServerData server = new ServerData();
         server.loadData();
 
         new LoginPage(server);

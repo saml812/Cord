@@ -6,7 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class Dashboard3 extends JFrame{
+public class ProfilesPage extends JFrame{
     private JPanel panel1;
     private JLabel displayName;
     private JLabel Feed;
@@ -37,10 +37,11 @@ public class Dashboard3 extends JFrame{
     private JPanel selectedProfile;
     private JFrame frame;
     private User account = null;
-    private Data server;
+    private ServerData server;
     private JLabel noResults;
+    private boolean notExist = false;
 
-    public Dashboard3(Data server) {
+    public ProfilesPage(ServerData server) {
         this.server = server;
         for (User user :  this.server.getAccounts()){
             if (user.isLoggedIn()){
@@ -63,7 +64,7 @@ public class Dashboard3 extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new Dashboard1(server);
+                new FeedPage(server);
             }
         });
 
@@ -72,7 +73,7 @@ public class Dashboard3 extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new Dashboard2(server);
+                new MessagesPage(server);
             }
         });
 
@@ -81,7 +82,7 @@ public class Dashboard3 extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new Dashboard3(server);
+                new ProfilesPage(server);
             }
         });
 
@@ -101,7 +102,7 @@ public class Dashboard3 extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new Dashboard(server);
+                new MainMenuPage(server);
             }
         });
 
@@ -119,6 +120,7 @@ public class Dashboard3 extends JFrame{
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
                     String newName = changeUsername.getText();
+                    changeUsername.setText("");
                     if (newName.equals("")){
                         errorMessage_NONAME();
                     }
@@ -139,6 +141,7 @@ public class Dashboard3 extends JFrame{
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
                     String newEmail = changeEmail.getText();
+                    changeEmail.setText("");
                     if (newEmail.equals("")){
                         errorMessage_NOEMAIL();
                     }
@@ -159,6 +162,7 @@ public class Dashboard3 extends JFrame{
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
                     String newPassword = String.valueOf(changePassword.getPassword());
+                    changePassword.setText("");
                     if (newPassword.equals("")){
                         errorMessage_NOPASSWORD();
                     }
@@ -179,6 +183,7 @@ public class Dashboard3 extends JFrame{
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
                     String newAge = changeAge.getText();
+                    changeAge.setText("");
                     if (newAge.equals("")){
                         errorMessage_NOAGE();
                     }
@@ -302,10 +307,9 @@ public class Dashboard3 extends JFrame{
             }
         }
 
-        noResults = new JLabel("");
-        noResults.setText("No usernames found");
         if (searchedProfiles.size() == 0){
-            searchResults.add(noResults);
+            notExist = true;
+            createUIComponents();
         }
     }
 
@@ -335,4 +339,12 @@ public class Dashboard3 extends JFrame{
         return;
     }
 
+    public void createUIComponents() {
+        if (notExist){
+            searchResults = new JPanel();
+            noResults = new JLabel("No usernames found");
+            searchResults.add(noResults);
+        }
+
+    }
 }

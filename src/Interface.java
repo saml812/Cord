@@ -38,7 +38,7 @@ public class Interface {
                     }
                 }
 
-                User newProfile = new User(userData[1], userData[2], userData[3], Integer.parseInt(userData[4]), hobbies, feedHistory);
+                User newProfile = new User(userData[1], userData[2], userData[3], Integer.parseInt(userData[4]), hobbies, feedHistory, textHistory);
                 accounts.add(newProfile);
                 System.out.println(newProfile.getFeedHistory().get(0));
             }

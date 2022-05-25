@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class SignupPage extends JFrame{
     private JPanel panel1;
@@ -11,9 +13,9 @@ public class SignupPage extends JFrame{
     private JButton goBackButton;
     private JButton createButton;
     private JFrame frame;
-    private Data server;
+    private ServerData server;
 
-    public SignupPage(Data server) {
+    public SignupPage(ServerData server) {
         this.server = server;
         frame = new JFrame("Welcome");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -36,6 +38,16 @@ public class SignupPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 registerUser();
+            }
+        });
+
+        fpassword.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    registerUser();
+                }
             }
         });
     }
@@ -62,7 +74,7 @@ public class SignupPage extends JFrame{
         newProfile.setLoggedIn(true);
         this.server.getAccounts().add(newProfile);
         frame.dispose();
-        new Dashboard(server);
+        new MainMenuPage(server);
     }
 }
 
