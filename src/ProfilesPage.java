@@ -33,13 +33,24 @@ public class ProfilesPage extends JFrame{
     private JTextArea friendList;
     private JTextArea hobbyList;
     private JTextField deleteHobby;
-    private JPanel searchResults;
-    private JPanel selectedProfile;
+    private JTextArea searchResults;
+    private User selectedProfile;
+    private JTextField choiceText;
+    private JLabel choiceLabel;
+    private JLabel selectedUserName;
+    private JLabel selectedUserEmail;
+    private JLabel selectedUserAge;
+    private JLabel friendRequest;
+    private JLabel selectedUser;
+    private JTextArea selectedUserFriends;
+    private JTextArea selectedUserHobbies;
+    private JLabel FName;
+    private JLabel FName1;
+    private JScrollPane Scroll1;
+    private JScrollPane Scroll2;
     private JFrame frame;
     private User account = null;
     private ServerData server;
-    private JLabel noResults;
-    private boolean notExist = false;
 
     public ProfilesPage(ServerData server) {
         this.server = server;
@@ -113,6 +124,15 @@ public class ProfilesPage extends JFrame{
         displayAge.setText("Age: " + account.getAge());
         updateFriends();
         updateHobbies();
+        choiceLabel.setVisible(false);
+        choiceText.setVisible(false);
+        selectedUserFriends.setVisible(false);
+        selectedUserHobbies.setVisible(false);
+        FName.setVisible(false);
+        FName1.setVisible(false);
+        Scroll1.setVisible(false);
+        Scroll2.setVisible(false);
+        friendRequest.setVisible(false);
 
         changeUsername.addKeyListener(new KeyAdapter() {
             @Override
@@ -239,6 +259,19 @@ public class ProfilesPage extends JFrame{
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    choiceLabel.setVisible(false);
+                    choiceText.setVisible(false);
+                    selectedUserFriends.setVisible(false);
+                    selectedUserHobbies.setVisible(false);
+                    FName.setVisible(false);
+                    FName1.setVisible(false);
+                    Scroll1.setVisible(false);
+                    Scroll2.setVisible(false);
+                    friendRequest.setVisible(false);
+                    selectedUser.setVisible(false);
+                    selectedUserName.setVisible(false);
+                    selectedUserEmail.setVisible(false);
+                    selectedUserAge.setVisible(false);
                     String userName = searchedUser.getText();
                     searchedUser.setText("");
                     if (userName.equals("")){
@@ -295,6 +328,7 @@ public class ProfilesPage extends JFrame{
     }
 
     public void displayResults(String userName){
+        searchResults.setText("");
         ArrayList<User> searchedProfiles = new ArrayList<User>();
         for (int i = 0; i < server.getAccounts().size(); i++)
         {
@@ -308,8 +342,39 @@ public class ProfilesPage extends JFrame{
         }
 
         if (searchedProfiles.size() == 0){
-            notExist = true;
-            createUIComponents();
+            searchResults.append("No users found");
+            choiceLabel.setVisible(false);
+            choiceText.setVisible(false);
+        }
+        else
+        {
+            choiceLabel.setVisible(true);
+            choiceText.setVisible(true);
+            for (int i = 0; i < searchedProfiles.size(); i++)
+            {
+                String profileName = searchedProfiles.get(i).getName();
+                int choiceNum = i + 1;
+                searchResults.append(choiceNum + ". " + profileName + "\n");
+            }
+
+            choiceText.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    super.keyPressed(e);
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                        String text = choiceText.getText();
+                        choiceText.setText("");
+                        if (text.equals("")){
+                            errorMessage_NOCHOICE();
+                        }
+                        else{
+                            int number = Integer.parseInt(text);
+                            selectedProfile = searchedProfiles.get(number-1);
+                            displayUSERINFO(selectedProfile);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -339,12 +404,48 @@ public class ProfilesPage extends JFrame{
         return;
     }
 
-    public void createUIComponents() {
-        if (notExist){
-            searchResults = new JPanel();
-            noResults = new JLabel("No usernames found");
-            searchResults.add(noResults);
+    public void errorMessage_NOCHOICE(){
+        JOptionPane.showMessageDialog(this, "Please enter a valid choice", "Try again", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    public void displayUSERINFO(User selected){
+        selectedUserFriends.setVisible(true);
+        selectedUserHobbies.setVisible(true);
+        FName.setVisible(true);
+        FName1.setVisible(true);
+        Scroll1.setVisible(true);
+        Scroll2.setVisible(true);
+        friendRequest.setVisible(true);
+        selectedUser.setVisible(true);
+        selectedUserName.setVisible(true);
+        selectedUserEmail.setVisible(true);
+        selectedUserAge.setVisible(true);
+        selectedUser.setText(selected.getName() + "'s Profile");
+        selectedUserName.setText("Name: " + selected.getName());
+        selectedUserEmail.setText("Email: " + selected.getEmail());
+        selectedUserAge.setText("Age: " + selected.getAge());
+
+        selectedUserFriends.selectAll();
+        selectedUserFriends.replaceSelection("");
+        if (selectedProfile.getFriends().size() > 0){
+            for (int i = 0; i < selectedProfile.getFriends().size(); i++){
+                selectedUserFriends.append(i+1 + ". " + selectedProfile.getFriends().get(i).getName() + "\n");
+            }
+        }
+        else {
+            selectedUserFriends.append(selectedProfile.getName() + " has no friends");
         }
 
+        selectedUserHobbies.selectAll();
+        selectedUserHobbies.replaceSelection("");
+        if (selectedProfile.getHobbies().size() > 0){
+            for (int i = 0; i < selectedProfile.getHobbies().size(); i++){
+                selectedUserHobbies.append(i+1 + ". " + selectedProfile.getHobbies().get(i) + "\n");
+            }
+        }
+        else {
+            selectedUserHobbies.append(selectedProfile.getName() + " has no hobbies");
+        }
     }
 }
