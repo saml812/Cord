@@ -12,10 +12,10 @@ public class LoginPage extends JFrame{
     private JButton logIn;
     private JButton signUp;
     private JFrame frame;
-    private ServerData server;
+    private AppData server;
     private User profile = null;
 
-    public LoginPage(ServerData server){
+    public LoginPage(AppData server){
         this.server = server;
         frame = new JFrame("Welcome");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);

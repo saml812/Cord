@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ServerData {
+public class AppData {
     ArrayList<User> accounts = new ArrayList<User>();
     ArrayList<String> activeFeed = new ArrayList<String>();
     User user = null;

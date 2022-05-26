@@ -2,7 +2,7 @@ import java.io.FileWriter;   // Import the FileWriter class
 import java.io.IOException;  // Import the IOException class to handle errors
 import java.util.ArrayList;
 
-public class Saver {
+public class AppSaver {
     public static void writeToFile(ArrayList<User> accounts, ArrayList<String> activeFeed){
         try {
             FileWriter myWriter = new FileWriter("src/Database");

@@ -4,13 +4,9 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
 
 
-        ServerData server = new ServerData();
-        server.loadData();
+        AppData app = new AppData();
+        app.loadData();
+        new LoginPage(app);
 
-        new LoginPage(server);
-
-        //Interface Cord = new Interface();
-        //Cord.loadData();
-        //Cord.start();
     }
 }

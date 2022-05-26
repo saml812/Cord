@@ -50,10 +50,10 @@ public class ProfilesPage extends JFrame{
     private JLabel hobbyLabel;
     private JFrame frame;
     private User account = null;
-    private ServerData server;
+    private AppData server;
     private ArrayList<User> searchedProfiles = null;
 
-    public ProfilesPage(ServerData server) {
+    public ProfilesPage(AppData server) {
         this.server = server;
         for (User user :  this.server.getAccounts()){
             if (user.isLoggedIn()){
@@ -104,7 +104,7 @@ public class ProfilesPage extends JFrame{
                 super.mouseClicked(e);
                 frame.dispose();
                 account.setLoggedIn(false);
-                Saver.writeToFile(server.getAccounts(), server.activeFeed);
+                AppSaver.writeToFile(server.getAccounts(), server.activeFeed);
                 new LoginPage(server);
             }
         });

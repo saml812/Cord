@@ -13,9 +13,9 @@ public class SignupPage extends JFrame{
     private JButton goBackButton;
     private JButton createButton;
     private JFrame frame;
-    private ServerData server;
+    private AppData server;
 
-    public SignupPage(ServerData server) {
+    public SignupPage(AppData server) {
         this.server = server;
         frame = new JFrame("Welcome");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);

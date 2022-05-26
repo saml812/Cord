@@ -1,8 +1,5 @@
-import com.sun.net.httpserver.Authenticator;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Array;
 import java.util.*;
 public class Interface {
     ArrayList<User> accounts = new ArrayList<User>();
@@ -70,7 +67,7 @@ public class Interface {
         }
         if (userChoice.equals("3")){
             System.out.println("Saving data. Good-bye!");
-            Saver.writeToFile(accounts, activeFeed);
+            AppSaver.writeToFile(accounts, activeFeed);
         }
     }
 

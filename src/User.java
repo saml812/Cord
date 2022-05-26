@@ -27,22 +27,6 @@ public class User {
         loggedIn = false;
     }
 
-    public ArrayList<User> getIncomingRequests() {
-        return incomingRequests;
-    }
-
-    public void setIncomingRequests(ArrayList<User> incomingRequests) {
-        this.incomingRequests = incomingRequests;
-    }
-
-    public ArrayList<User> getOutgoingRequests() {
-        return outgoingRequests;
-    }
-
-    public void setOutgoingRequests(ArrayList<User> outgoingRequests) {
-        this.outgoingRequests = outgoingRequests;
-    }
-
     public User(String name, String email, String password, int age){
         this.name = name;
         this.email = email;
@@ -71,6 +55,22 @@ public class User {
         loggedIn = false;
     }
 
+    public ArrayList<User> getIncomingRequests() {
+        return incomingRequests;
+    }
+
+    public void setIncomingRequests(ArrayList<User> incomingRequests) {
+        this.incomingRequests = incomingRequests;
+    }
+
+    public ArrayList<User> getOutgoingRequests() {
+        return outgoingRequests;
+    }
+
+    public void setOutgoingRequests(ArrayList<User> outgoingRequests) {
+        this.outgoingRequests = outgoingRequests;
+    }
+
     public String getName() {
         return name;
     }
@@ -89,22 +89,6 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public void setFriends(ArrayList<User> friends) {
-        this.friends = friends;
-    }
-
-    public void setTextHistory(ArrayList<String> textHistory) {
-        this.textHistory = textHistory;
-    }
-
-    public void setHobbies(ArrayList<String> hobbies) {
-        this.hobbies = hobbies;
-    }
-
-    public void setFeedHistory(ArrayList<String> feedHistory) {
-        this.feedHistory = feedHistory;
     }
 
     public String getEmail() {

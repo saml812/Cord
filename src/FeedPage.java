@@ -17,9 +17,9 @@ public class FeedPage extends JFrame{
     private JTextArea FeedBox;
     private JFrame frame;
     private User account = null;
-    private ServerData server;
+    private AppData server;
 
-    public FeedPage(ServerData server) {
+    public FeedPage(AppData server) {
         this.server = server;
         for (User user :  this.server.getAccounts()){
             if (user.isLoggedIn()){
@@ -71,7 +71,7 @@ public class FeedPage extends JFrame{
                 super.mouseClicked(e);
                 frame.dispose();
                 account.setLoggedIn(false);
-                Saver.writeToFile(server.getAccounts(), server.activeFeed);
+                AppSaver.writeToFile(server.getAccounts(), server.activeFeed);
                 new LoginPage(server);
             }
         });
