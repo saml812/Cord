@@ -1,7 +1,7 @@
-User|bob|lee|word|2|read books,play games,eat food|null|/hello world~ bob/whats up guys~ bob/HI GUYS~ bob|null|null|null
+User|bob|lee|word|2|read books,play games,eat food|joe|/hello world~ bob/whats up guys~ bob/HI GUYS~ bob|null|null|null
 User|joe|mama|word|5|play games,read books,paint|null|null|null|null|null
 Feed|hello world~ bob
 Feed|whats up guys~ bob
 Feed|HI GUYS~ bob
-Add|bob|null|null|null
+Add|bob|joe|null|null
 Add|joe|null|null|null

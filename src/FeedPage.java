@@ -13,14 +13,8 @@ public class FeedPage extends JFrame{
     private JLabel Profiles;
     private JLabel logOut;
     private JPanel JPanel;
-    private JPanel JPanel1;
-    private JPanel JPanel2;
-    private JPanel JPanel3;
-    private JPanel JPanel4;
-    private JPanel MenuPanel;
     private JTextField feedText;
     private JTextArea FeedBox;
-    private JPanel FeedPanel;
     private JFrame frame;
     private User account = null;
     private ServerData server;

@@ -14,13 +14,6 @@ public class ProfilesPage extends JFrame{
     private JLabel Profiles;
     private JLabel logOut;
     private JPanel JPanel;
-    private JPanel JPanel1;
-    private JPanel JPanel2;
-    private JPanel JPanel3;
-    private JPanel JPanel4;
-    private JPanel MenuPanel;
-    private JPanel UserProfile;
-    private JPanel SearchProfiles;
     private JTextField searchedUser;
     private JTextField changeUsername;
     private JTextField changeEmail;
@@ -48,6 +41,13 @@ public class ProfilesPage extends JFrame{
     private JLabel FName1;
     private JScrollPane Scroll1;
     private JScrollPane Scroll2;
+    private JTextArea inRequests;
+    private JTextArea outRequests;
+    private JTextField choiceField1;
+    private JTextField choiceField2;
+    private JLabel choiceLabel1;
+    private JLabel choiceLabel2;
+    private JLabel hobbyLabel;
     private JFrame frame;
     private User account = null;
     private ServerData server;
@@ -134,6 +134,11 @@ public class ProfilesPage extends JFrame{
         Scroll1.setVisible(false);
         Scroll2.setVisible(false);
         friendRequest.setVisible(false);
+        choiceField1.setVisible(false);
+        choiceLabel1.setVisible(false);
+        choiceField2.setVisible(false);
+        choiceLabel2.setVisible(false);
+        displayRequests();
 
         changeUsername.addKeyListener(new KeyAdapter() {
             @Override
@@ -296,19 +301,15 @@ public class ProfilesPage extends JFrame{
                     int number = 0;
                     try {
                         number = Integer.parseInt(text);
-                        System.out.println(number);
                     } catch(NumberFormatException c){
-                        System.out.println("hello");
                         errorMessage_NOCHOICE();
                         return;
                     }
                     if (number > searchedProfiles.size()){
-                        System.out.println("yo");
                         errorMessage_NOCHOICE();
                     }
                     else{
                         selectedProfile = searchedProfiles.get(number-1);
-                        System.out.println(selectedProfile.getName());
                         displayUSERINFO(selectedProfile);
                     }
                 }
@@ -319,7 +320,73 @@ public class ProfilesPage extends JFrame{
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                sendRequest();
+            }
+        });
 
+        choiceField1.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    String text = choiceField1.getText();
+                    choiceField1.setText("");
+                    int number = 0;
+                    try {
+                        number = Integer.parseInt(text);
+                    } catch(NumberFormatException c){
+                        errorMessage_NOCHOICE();
+                        return;
+                    }
+                    if (number > account.getIncomingRequests().size()){
+                        errorMessage_NOCHOICE();
+                    }
+                    else{
+                        selectedProfile = account.getIncomingRequests().get(number-1);
+                        int response = JOptionPane.showConfirmDialog(frame, "Accept request?", "Confirm", JOptionPane.YES_NO_OPTION);
+                        if (response == JOptionPane.YES_OPTION){
+                            account.getFriends().add(selectedProfile);
+                            account.getIncomingRequests().remove(selectedProfile);
+                            selectedProfile.getOutgoingRequests().remove(account);
+                        }
+                        if (response == JOptionPane.NO_OPTION) {
+                            account.getIncomingRequests().remove(selectedProfile);
+                            selectedProfile.getOutgoingRequests().remove(account);
+                        }
+                    }
+                }
+                displayRequests();
+                updateFriends();
+            }
+        });
+
+        choiceField2.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    String text = choiceField2.getText();
+                    choiceField2.setText("");
+                    int number = 0;
+                    try {
+                        number = Integer.parseInt(text);
+                    } catch(NumberFormatException c){
+                        errorMessage_NOCHOICE();
+                        return;
+                    }
+                    if (number > account.getIncomingRequests().size()){
+                        errorMessage_NOCHOICE();
+                    }
+                    else{
+                        selectedProfile = account.getIncomingRequests().get(number-1);
+                        int response = JOptionPane.showConfirmDialog(frame, "Delete request?", "Confirm", JOptionPane.YES_NO_OPTION);
+                        if (response == JOptionPane.YES_OPTION){
+                            account.getOutgoingRequests().remove(selectedProfile);
+                            selectedProfile.getIncomingRequests().remove(account);
+                        }
+                    }
+                }
+                displayRequests();
             }
         });
     }
@@ -341,10 +408,14 @@ public class ProfilesPage extends JFrame{
         if (account.getHobbies().size() > 0){
             for (int i = 0; i < account.getHobbies().size(); i++){
                 hobbyList.append(account.getHobbies().get(i) + "\n");
+                deleteHobby.setVisible(true);
+                hobbyLabel.setVisible(true);
             }
         }
         else {
             hobbyList.append("You have no hobbies");
+            deleteHobby.setVisible(false);
+            hobbyLabel.setVisible(false);
         }
     }
 
@@ -366,7 +437,7 @@ public class ProfilesPage extends JFrame{
         }
     }
 
-    public void displayResults(String userName){
+    public void displayResults(String userName) {
         searchResults.setText("");
         ArrayList<User> profiles = new ArrayList<User>();
         for (int i = 0; i < server.getAccounts().size(); i++)
@@ -471,5 +542,62 @@ public class ProfilesPage extends JFrame{
         }
     }
 
+    public void sendRequest(){
+        if (account.getFriends().contains(selectedProfile))
+        {
+            JOptionPane.showMessageDialog(this, "You're already friends", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (account.getOutgoingRequests().contains(selectedProfile)){
+            JOptionPane.showMessageDialog(this, "You already sent one", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else
+        {
+            if (account.equals(selectedProfile)){
+                JOptionPane.showMessageDialog(this, "You cannot add yourself", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else{
+                account.getOutgoingRequests().add(selectedProfile);
+                selectedProfile.getIncomingRequests().add(account);
+                JOptionPane.showMessageDialog(this, "Sent", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        displayRequests();
+    }
 
+    public void displayRequests(){
+        inRequests.selectAll();
+        inRequests.replaceSelection("");
+        if (account.getIncomingRequests().size() > 0){
+            for (int i = 0; i < account.getIncomingRequests().size(); i++){
+                inRequests.append(i+1 + ". " + account.getIncomingRequests().get(i).getName() + "\n");
+            }
+            choiceField1.setVisible(true);
+            choiceLabel1.setVisible(true);
+
+        }
+        else {
+            inRequests.append("You have no incoming requests");
+            choiceField1.setVisible(false);
+            choiceLabel1.setVisible(false);
+        }
+
+        outRequests.selectAll();
+        outRequests.replaceSelection("");
+        if (account.getOutgoingRequests().size() > 0){
+            for (int i = 0; i < account.getOutgoingRequests().size(); i++){
+                outRequests.append(i+1 + ". " + account.getOutgoingRequests().get(i).getName() + "\n");
+            }
+            choiceField2.setVisible(true);
+            choiceLabel2.setVisible(true);
+
+        }
+        else {
+            outRequests.append("You have no outgoing requests");
+            choiceField2.setVisible(false);
+            choiceLabel2.setVisible(false);
+        }
+    }
 }
