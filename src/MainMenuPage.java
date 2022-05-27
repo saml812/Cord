@@ -24,7 +24,7 @@ public class MainMenuPage extends JFrame{
             }
         }
 
-        frame = new JFrame("Dashboard");
+        frame = new JFrame("Main Menu");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(1200, 800));
         frame.setResizable(false);

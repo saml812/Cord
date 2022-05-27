@@ -27,7 +27,7 @@ public class FeedPage extends JFrame{
             }
         }
 
-        frame = new JFrame("Dashboard");
+        frame = new JFrame("Feed");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(1200, 800));
         frame.setResizable(false);
@@ -121,5 +121,4 @@ public class FeedPage extends JFrame{
             FeedBox.append("The feed is empty!");
         }
     }
-
 }

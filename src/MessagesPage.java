@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -11,14 +13,16 @@ public class MessagesPage extends JFrame{
     private JLabel Profiles;
     private JLabel logOut;
     private JPanel JPanel;
-    private JTextArea MessageBlock;
+    private JTextArea messageBlock;
     private JTextArea messageField;
-    private JTextArea FriendsBlock;
+    private JTextArea friendsBlock;
     private JTextField choiceField;
     private JLabel userDM;
+    private JScrollPane scrollBar;
     private JFrame frame;
     private User account = null;
     private AppData server;
+    private User selectedProfile = null;
 
     public MessagesPage(AppData server) {
         this.server = server;
@@ -28,7 +32,7 @@ public class MessagesPage extends JFrame{
             }
         }
 
-        frame = new JFrame("Dashboard");
+        frame = new JFrame("Messages");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(1200, 800));
         frame.setResizable(false);
@@ -37,6 +41,10 @@ public class MessagesPage extends JFrame{
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         displayName.setText("Hello " + account.getName());
+        updateFriends();
+        messageBlock.setVisible(false);
+        messageField.setVisible(false);
+        scrollBar.setVisible(false);
 
         Feed.addMouseListener(new MouseAdapter() {
             @Override
@@ -85,6 +93,54 @@ public class MessagesPage extends JFrame{
             }
         });
 
-
+        choiceField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    String text = choiceField.getText();
+                    choiceField.setText("");
+                    int number = 0;
+                    try {
+                        number = Integer.parseInt(text);
+                    } catch(NumberFormatException c){
+                        errorMessage_NOCHOICE();
+                        return;
+                    }
+                    if (number > account.getFriends().size()){
+                        errorMessage_NOCHOICE();
+                    }
+                    else{
+                        selectedProfile = account.getFriends().get(number-1);
+                        displayMessages(selectedProfile);
+                    }
+                }
+            }
+        });
     }
+
+    public void updateFriends(){
+        friendsBlock.selectAll();
+        friendsBlock.replaceSelection("");
+        if (account.getFriends().size() > 0){
+            for (int i = 0; i < account.getFriends().size(); i++){
+                friendsBlock.append(i+1 + ". " + account.getFriends().get(i).getName() + "\n");
+            }
+        }
+        else {
+            friendsBlock.append("You have no friends");
+        }
+    }
+
+    public void errorMessage_NOCHOICE(){
+        JOptionPane.showMessageDialog(this, "Please enter a valid choice", "Try again", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    public void displayMessages(User user){
+        messageBlock.setVisible(true);
+        messageField.setVisible(true);
+        scrollBar.setVisible(true);
+    }
+
 }

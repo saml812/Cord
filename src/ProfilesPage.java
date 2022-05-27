@@ -48,6 +48,7 @@ public class ProfilesPage extends JFrame{
     private JLabel choiceLabel1;
     private JLabel choiceLabel2;
     private JLabel hobbyLabel;
+    private JPanel userProfile;
     private JFrame frame;
     private User account = null;
     private AppData server;
@@ -61,7 +62,7 @@ public class ProfilesPage extends JFrame{
             }
         }
 
-        frame = new JFrame("Dashboard");
+        frame = new JFrame("Profiles");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(1200, 800));
         frame.setResizable(false);
@@ -138,6 +139,7 @@ public class ProfilesPage extends JFrame{
         choiceLabel1.setVisible(false);
         choiceField2.setVisible(false);
         choiceLabel2.setVisible(false);
+        userProfile.setVisible(false);
         displayRequests();
 
         changeUsername.addKeyListener(new KeyAdapter() {
@@ -279,6 +281,7 @@ public class ProfilesPage extends JFrame{
                     selectedUserName.setVisible(false);
                     selectedUserEmail.setVisible(false);
                     selectedUserAge.setVisible(false);
+                    userProfile.setVisible(false);
                     String userName = searchedUser.getText();
                     searchedUser.setText("");
                     if (userName.equals("")){
@@ -346,6 +349,7 @@ public class ProfilesPage extends JFrame{
                         int response = JOptionPane.showConfirmDialog(frame, "Accept request?", "Confirm", JOptionPane.YES_NO_OPTION);
                         if (response == JOptionPane.YES_OPTION){
                             account.getFriends().add(selectedProfile);
+                            selectedProfile.getFriends().add(account);
                             account.getIncomingRequests().remove(selectedProfile);
                             selectedProfile.getOutgoingRequests().remove(account);
                         }
@@ -374,11 +378,11 @@ public class ProfilesPage extends JFrame{
                         errorMessage_NOCHOICE();
                         return;
                     }
-                    if (number > account.getIncomingRequests().size()){
+                    if (number > account.getOutgoingRequests().size()){
                         errorMessage_NOCHOICE();
                     }
                     else{
-                        selectedProfile = account.getIncomingRequests().get(number-1);
+                        selectedProfile = account.getOutgoingRequests().get(number-1);
                         int response = JOptionPane.showConfirmDialog(frame, "Delete request?", "Confirm", JOptionPane.YES_NO_OPTION);
                         if (response == JOptionPane.YES_OPTION){
                             account.getOutgoingRequests().remove(selectedProfile);
@@ -503,6 +507,7 @@ public class ProfilesPage extends JFrame{
     }
 
     public void displayUSERINFO(User selected){
+        userProfile.setVisible(true);
         selectedUserFriends.setVisible(true);
         selectedUserHobbies.setVisible(true);
         FName.setVisible(true);
