@@ -4,7 +4,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.Array;
 
 public class MessagesPage extends JFrame{
     private JPanel panel1;
@@ -22,12 +21,12 @@ public class MessagesPage extends JFrame{
     private JTextArea friendsBlock;
     private JTextArea messageBlock;
     private User account = null;
-    private AppData server;
+    private AppData usersData;
     private User selectedProfile = null;
 
-    public MessagesPage(AppData server) {
-        this.server = server;
-        for (User user :  this.server.getAccounts()){
+    public MessagesPage(AppData usersData) {
+        this.usersData = usersData;
+        for (User user :  this.usersData.getAccounts()){
             if (user.isLoggedIn()){
                 account = user;
             }
@@ -50,7 +49,7 @@ public class MessagesPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new FeedPage(server);
+                new FeedPage(usersData);
             }
         });
 
@@ -59,7 +58,7 @@ public class MessagesPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new MessagesPage(server);
+                new MessagesPage(usersData);
             }
         });
 
@@ -68,7 +67,7 @@ public class MessagesPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new ProfilesPage(server);
+                new ProfilesPage(usersData);
             }
         });
 
@@ -78,8 +77,8 @@ public class MessagesPage extends JFrame{
                 super.mouseClicked(e);
                 frame.dispose();
                 account.setLoggedIn(false);
-                AppSaver.writeToFile(server.getAccounts(), server.activeFeed);
-                new LoginPage(server);
+                AppSaver.writeToFile(usersData.getAccounts(), usersData.activeFeed);
+                new LoginPage(usersData);
             }
         });
 
@@ -88,7 +87,7 @@ public class MessagesPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new MainMenuPage(server);
+                new MainMenuPage(usersData);
             }
         });
 

@@ -7,16 +7,16 @@ import java.awt.event.KeyEvent;
 
 public class SignupPage extends JFrame{
     private JPanel panel1;
-    private JTextField femail;
-    private JTextField fname;
-    private JPasswordField fpassword;
+    private JTextField fEmail;
+    private JTextField fName;
+    private JPasswordField fPassword;
     private JButton goBackButton;
     private JButton createButton;
     private JFrame frame;
-    private AppData server;
+    private AppData usersData;
 
-    public SignupPage(AppData server) {
-        this.server = server;
+    public SignupPage(AppData usersData) {
+        this.usersData = usersData;
         frame = new JFrame("Welcome");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500, 500));
@@ -30,7 +30,7 @@ public class SignupPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                new LoginPage(server);
+                new LoginPage(usersData);
             }
         });
 
@@ -41,7 +41,7 @@ public class SignupPage extends JFrame{
             }
         });
 
-        fpassword.addKeyListener(new KeyAdapter() {
+        fPassword.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
@@ -53,14 +53,14 @@ public class SignupPage extends JFrame{
     }
 
     public void registerUser(){
-        String name = fname.getText();
-        String email = femail.getText();
-        String password = String.valueOf(fpassword.getPassword());
+        String name = fName.getText();
+        String email = fEmail.getText();
+        String password = String.valueOf(fPassword.getPassword());
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()){
             JOptionPane.showMessageDialog(this, "Please enter all fields", "Try again", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        for (User user : server.getAccounts()){
+        for (User user : usersData.getAccounts()){
             if (user.getName().equals(name)){
                 JOptionPane.showMessageDialog(this, "This username already exist", "Try again", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -72,9 +72,9 @@ public class SignupPage extends JFrame{
         }
         User newProfile = new User(name, email, password);
         newProfile.setLoggedIn(true);
-        this.server.getAccounts().add(newProfile);
+        this.usersData.getAccounts().add(newProfile);
         frame.dispose();
-        new MainMenuPage(server);
+        new MainMenuPage(usersData);
     }
 }
 

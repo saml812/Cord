@@ -7,7 +7,7 @@ public class AppData {
     ArrayList<User> accounts = new ArrayList<User>();
     ArrayList<String> activeFeed = new ArrayList<String>();
     User user = null;
-    User selectedProfile = null;
+    User selectedUser = null;
 
     public ArrayList<User> getAccounts() {
         return accounts;
@@ -34,11 +34,11 @@ public class AppData {
     }
 
     public User getSelectedProfile() {
-        return selectedProfile;
+        return selectedUser;
     }
 
-    public void setSelectedProfile(User selectedProfile) {
-        this.selectedProfile = selectedProfile;
+    public void setSelectedProfile(User selectedUser) {
+        this.selectedUser = selectedUser;
     }
 
     public void loadData() throws FileNotFoundException {

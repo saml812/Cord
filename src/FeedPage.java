@@ -17,11 +17,11 @@ public class FeedPage extends JFrame{
     private JTextArea FeedBox;
     private JFrame frame;
     private User account = null;
-    private AppData server;
+    private AppData usersData;
 
-    public FeedPage(AppData server) {
-        this.server = server;
-        for (User user :  this.server.getAccounts()){
+    public FeedPage(AppData usersData) {
+        this.usersData = usersData;
+        for (User user :  this.usersData.getAccounts()){
             if (user.isLoggedIn()){
                 account = user;
             }
@@ -41,7 +41,7 @@ public class FeedPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new FeedPage(server);
+                new FeedPage(usersData);
             }
         });
 
@@ -50,7 +50,7 @@ public class FeedPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new MessagesPage(server);
+                new MessagesPage(usersData);
             }
         });
 
@@ -59,7 +59,7 @@ public class FeedPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new ProfilesPage(server);
+                new ProfilesPage(usersData);
             }
         });
 
@@ -69,8 +69,8 @@ public class FeedPage extends JFrame{
                 super.mouseClicked(e);
                 frame.dispose();
                 account.setLoggedIn(false);
-                AppSaver.writeToFile(server.getAccounts(), server.activeFeed);
-                new LoginPage(server);
+                AppSaver.writeToFile(usersData.getAccounts(), usersData.activeFeed);
+                new LoginPage(usersData);
             }
         });
 
@@ -79,7 +79,7 @@ public class FeedPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new MainMenuPage(server);
+                new MainMenuPage(usersData);
             }
         });
 
@@ -89,11 +89,11 @@ public class FeedPage extends JFrame{
                 super.keyPressed(e);
                 if (e.getKeyCode() == KeyEvent.VK_ENTER)
                 {
-                    if (server.getActiveFeed().size() == 0){
+                    if (usersData.getActiveFeed().size() == 0){
                         FeedBox.setText("");
                     }
                     String text = feedText.getText() + "~ " + account.getName();
-                    server.getActiveFeed().add(text);
+                    usersData.getActiveFeed().add(text);
                     account.getFeedHistory().add(text);
                     FeedBox.append("- " + text.substring(0, text.indexOf("~ ")) + " by: " + account.getName() + "\n");
                     feedText.setText("");
@@ -107,9 +107,9 @@ public class FeedPage extends JFrame{
     }
 
     public void updateFeed(){
-        if (server.getActiveFeed().size() > 0){
-            for (String post : server.getActiveFeed()) {
-                for (User account : server.getAccounts()){
+        if (usersData.getActiveFeed().size() > 0){
+            for (String post : usersData.getActiveFeed()) {
+                for (User account : usersData.getAccounts()){
                     for (int i = 0; i < account.getFeedHistory().size(); i++){
                         if (account.getFeedHistory().get(i).equals(post)){
                             FeedBox.append("- " + post.substring(0, post.indexOf("~ ")) + " by: " + account.getName() + "\n");

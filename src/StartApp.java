@@ -1,6 +1,6 @@
 import java.io.FileNotFoundException;
 
-public class Main {
+public class StartApp {
     public static void main(String[] args) throws FileNotFoundException {
 
         AppData app = new AppData();

@@ -13,12 +13,12 @@ public class MainMenuPage extends JFrame{
     private JPanel JPanel;
     private JFrame frame;
     private User account = null;
-    private AppData server;
+    private AppData usersData;
     private JLabel errorMessage;
 
-    public MainMenuPage(AppData server) {
-        this.server = server;
-        for (User user :  this.server.getAccounts()){
+    public MainMenuPage(AppData usersData) {
+        this.usersData = usersData;
+        for (User user :  this.usersData.getAccounts()){
             if (user.isLoggedIn()){
                 account = user;
             }
@@ -44,7 +44,7 @@ public class MainMenuPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new FeedPage(server);
+                new FeedPage(usersData);
             }
         });
 
@@ -53,7 +53,7 @@ public class MainMenuPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new MessagesPage(server);
+                new MessagesPage(usersData);
             }
         });
 
@@ -62,7 +62,7 @@ public class MainMenuPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new ProfilesPage(server);
+                new ProfilesPage(usersData);
             }
         });
 
@@ -72,8 +72,8 @@ public class MainMenuPage extends JFrame{
                 super.mouseClicked(e);
                 frame.dispose();
                 account.setLoggedIn(false);
-                AppSaver.writeToFile(server.getAccounts(), server.activeFeed);
-                new LoginPage(server);
+                AppSaver.writeToFile(usersData.getAccounts(), usersData.activeFeed);
+                new LoginPage(usersData);
             }
         });
 
@@ -82,7 +82,7 @@ public class MainMenuPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new MainMenuPage(server);
+                new MainMenuPage(usersData);
             }
         });
 

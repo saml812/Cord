@@ -6,17 +6,17 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class LoginPage extends JFrame{
-    private JTextField femail;
+    private JTextField fEmail;
     private JPanel panel1;
-    private JPasswordField fpassword;
+    private JPasswordField fPassword;
     private JButton logIn;
     private JButton signUp;
     private JFrame frame;
-    private AppData server;
-    private User profile = null;
+    private AppData usersData;
+    private User user = null;
 
-    public LoginPage(AppData server){
-        this.server = server;
+    public LoginPage(AppData usersData){
+        this.usersData = usersData;
         frame = new JFrame("Welcome");
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500, 500));
@@ -30,7 +30,7 @@ public class LoginPage extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
-                new SignupPage(server);
+                new SignupPage(usersData);
             }
         });
 
@@ -41,7 +41,7 @@ public class LoginPage extends JFrame{
             }
         });
 
-        fpassword.addKeyListener(new KeyAdapter() {
+        fPassword.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
@@ -53,21 +53,21 @@ public class LoginPage extends JFrame{
     }
 
     public void loginUser(){
-        String email = femail.getText();
-        String password = String.valueOf(fpassword.getPassword());
+        String email = fEmail.getText();
+        String password = String.valueOf(fPassword.getPassword());
         if (email.isEmpty() || password.isEmpty()){
             JOptionPane.showMessageDialog(this, "Please enter all fields", "Try again", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        for (User user : server.getAccounts()){
+        for (User user : usersData.getAccounts()){
             if (user.getEmail().equals(email)){
-                profile = user;
+                this.user = user;
             }
         }
-        if (profile != null){
-            if (profile.getPassword().equals(password)){
-                profile.setLoggedIn(true);
-                new MainMenuPage(server);
+        if (user != null){
+            if (user.getPassword().equals(password)){
+                user.setLoggedIn(true);
+                new MainMenuPage(usersData);
                 frame.dispose();
             }
             else

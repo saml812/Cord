@@ -37,8 +37,8 @@ public class ProfilesPage extends JFrame{
     private JLabel selectedUser;
     private JTextArea selectedUserFriends;
     private JTextArea selectedUserHobbies;
-    private JLabel FName;
-    private JLabel FName1;
+    private JLabel friendLabel;
+    private JLabel hobbiesLabel;
     private JScrollPane Scroll1;
     private JScrollPane Scroll2;
     private JTextArea inRequests;
@@ -51,12 +51,12 @@ public class ProfilesPage extends JFrame{
     private JPanel userProfile;
     private JFrame frame;
     private User account = null;
-    private AppData server;
+    private AppData usersData;
     private ArrayList<User> searchedProfiles = null;
 
-    public ProfilesPage(AppData server) {
-        this.server = server;
-        for (User user :  this.server.getAccounts()){
+    public ProfilesPage(AppData usersData) {
+        this.usersData = usersData;
+        for (User user :  this.usersData.getAccounts()){
             if (user.isLoggedIn()){
                 account = user;
             }
@@ -75,7 +75,7 @@ public class ProfilesPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new FeedPage(server);
+                new FeedPage(usersData);
             }
         });
 
@@ -84,7 +84,7 @@ public class ProfilesPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new MessagesPage(server);
+                new MessagesPage(usersData);
             }
         });
 
@@ -93,7 +93,7 @@ public class ProfilesPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new ProfilesPage(server);
+                new ProfilesPage(usersData);
             }
         });
 
@@ -103,8 +103,8 @@ public class ProfilesPage extends JFrame{
                 super.mouseClicked(e);
                 frame.dispose();
                 account.setLoggedIn(false);
-                AppSaver.writeToFile(server.getAccounts(), server.activeFeed);
-                new LoginPage(server);
+                AppSaver.writeToFile(usersData.getAccounts(), usersData.activeFeed);
+                new LoginPage(usersData);
             }
         });
 
@@ -113,7 +113,7 @@ public class ProfilesPage extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 frame.dispose();
-                new MainMenuPage(server);
+                new MainMenuPage(usersData);
             }
         });
 
@@ -128,8 +128,8 @@ public class ProfilesPage extends JFrame{
         choiceText.setVisible(false);
         selectedUserFriends.setVisible(false);
         selectedUserHobbies.setVisible(false);
-        FName.setVisible(false);
-        FName1.setVisible(false);
+        friendLabel.setVisible(false);
+        hobbiesLabel.setVisible(false);
         Scroll1.setVisible(false);
         Scroll2.setVisible(false);
         friendRequest.setVisible(false);
@@ -270,8 +270,8 @@ public class ProfilesPage extends JFrame{
                     choiceText.setVisible(false);
                     selectedUserFriends.setVisible(false);
                     selectedUserHobbies.setVisible(false);
-                    FName.setVisible(false);
-                    FName1.setVisible(false);
+                    friendLabel.setVisible(false);
+                    hobbiesLabel.setVisible(false);
                     Scroll1.setVisible(false);
                     Scroll2.setVisible(false);
                     friendRequest.setVisible(false);
@@ -445,14 +445,14 @@ public class ProfilesPage extends JFrame{
     public void displayResults(String userName) {
         searchResults.setText("");
         ArrayList<User> profiles = new ArrayList<User>();
-        for (int i = 0; i < server.getAccounts().size(); i++)
+        for (int i = 0; i < usersData.getAccounts().size(); i++)
         {
-            String profileName = server.getAccounts().get(i).getName();
+            String profileName = usersData.getAccounts().get(i).getName();
             profileName = profileName.toLowerCase();
 
             if (profileName.contains(userName))
             {
-                profiles.add(server.getAccounts().get(i));
+                profiles.add(usersData.getAccounts().get(i));
             }
         }
 
@@ -511,8 +511,8 @@ public class ProfilesPage extends JFrame{
         userProfile.setVisible(true);
         selectedUserFriends.setVisible(true);
         selectedUserHobbies.setVisible(true);
-        FName.setVisible(true);
-        FName1.setVisible(true);
+        friendLabel.setVisible(true);
+        hobbiesLabel.setVisible(true);
         Scroll1.setVisible(true);
         Scroll2.setVisible(true);
         friendRequest.setVisible(true);
