@@ -388,14 +388,19 @@
                   <grid row="3" column="0" row-span="4" col-span="2" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <font name="Courier New" size="16" style="0"/>
                   <foreground color="-1414585"/>
+                  <horizontalScrollBarPolicy value="31"/>
+                  <verticalScrollBarPolicy value="22"/>
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="f93ca" class="javax.swing.JTextArea" binding="messageBlock">
+                  <component id="3a5e" class="javax.swing.JTextArea" binding="messageBlock">
                     <constraints/>
                     <properties>
                       <editable value="false"/>
+                      <font name="Courier New" size="14" style="0"/>
+                      <lineWrap value="false"/>
                     </properties>
                   </component>
                 </children>
@@ -443,6 +448,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <font name="Courier New" size="14" style="0"/>
                   <text value="Type in here"/>
                 </properties>
               </component>
@@ -493,7 +499,7 @@
               </component>
               <component id="79e1a" class="javax.swing.JLabel" binding="userDM">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <foreground color="-16777216"/>

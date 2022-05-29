@@ -32,8 +32,6 @@ public class FeedPage extends JFrame{
         frame.setPreferredSize(new Dimension(1200, 800));
         frame.setResizable(false);
         frame.add(panel1);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         displayName.setText("Hello " + account.getName());
         updateFeed();
@@ -102,6 +100,9 @@ public class FeedPage extends JFrame{
                 }
             }
         });
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
 
     }
 

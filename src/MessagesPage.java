@@ -4,6 +4,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.lang.reflect.Array;
 
 public class MessagesPage extends JFrame{
     private JPanel panel1;
@@ -13,13 +14,13 @@ public class MessagesPage extends JFrame{
     private JLabel Profiles;
     private JLabel logOut;
     private JPanel JPanel;
-    private JTextArea messageBlock;
     private JTextArea messageField;
-    private JTextArea friendsBlock;
     private JTextField choiceField;
     private JLabel userDM;
     private JScrollPane scrollBar;
     private JFrame frame;
+    private JTextArea friendsBlock;
+    private JTextArea messageBlock;
     private User account = null;
     private AppData server;
     private User selectedProfile = null;
@@ -37,8 +38,6 @@ public class MessagesPage extends JFrame{
         frame.setPreferredSize(new Dimension(1200, 800));
         frame.setResizable(false);
         frame.add(panel1);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         displayName.setText("Hello " + account.getName());
         updateFriends();
@@ -112,11 +111,37 @@ public class MessagesPage extends JFrame{
                     }
                     else{
                         selectedProfile = account.getFriends().get(number-1);
-                        displayMessages(selectedProfile);
+                        displayMessages();
                     }
                 }
             }
         });
+
+        messageField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                messageField.setText("");
+            }
+        });
+
+        messageField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_ENTER){
+                    String comment = messageField.getText();
+                    messageField.setText("");
+                    account.getTextHistory().add(comment + "/" + account.getName() + "/" + selectedProfile.getName());
+                    selectedProfile.getTextHistory().add(comment + "/" + account.getName() + "/" + selectedProfile.getName());
+
+                    displayMessages();
+                }
+            }
+        });
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
     }
 
     public void updateFriends(){
@@ -137,10 +162,84 @@ public class MessagesPage extends JFrame{
         return;
     }
 
-    public void displayMessages(User user){
+    public void displayMessages(){
+        messageBlock.setText("");
         messageBlock.setVisible(true);
         messageField.setVisible(true);
         scrollBar.setVisible(true);
-    }
 
+        userDM.setText(selectedProfile.getName() + "'s messages");
+
+            for (int i = 0; i < account.getTextHistory().size(); i++){
+                String between = account.getTextHistory().get(i).substring(account.getTextHistory().get(i).indexOf("/")+1);
+                if (between.equals(account.getName() + "/" + selectedProfile.getName()) || between.equals(selectedProfile.getName() + "/" + account.getName())){
+                    if (between.substring(0,between.indexOf("/")).equals(account.getName())){
+
+                        String message = "";
+                        String splitMessage = "";
+                        String actualMessage = account.getTextHistory().get(i).substring(0,account.getTextHistory().get(i).indexOf("/"));
+                        String copyMessage = actualMessage;
+
+                        if (actualMessage.length() > 65){
+                            while (copyMessage.length() > 65){
+                                String lastWord = copyMessage.substring(0, 65);
+                                String newMessage = copyMessage.substring(0, lastWord.lastIndexOf(" ")) + "|";
+
+                                splitMessage += newMessage;
+                                copyMessage = copyMessage.substring(lastWord.lastIndexOf(" "));
+                            }
+                            String[] splits = splitMessage.split("\\|");
+
+                            for (int j = 0; j < 65-splits[0].length(); j++){
+                                message += " ";
+                            }
+
+                            for (int a = 0; a < splits.length; a++){
+                                if (a == 0){
+                                    messageBlock.append(message + splits[a] + " <--  " + "\n");
+                                }
+                                else{
+                                    messageBlock.append(message + splits[a] + "     " + "\n");
+                                }
+                            }
+                        }
+                        else{
+                            for (int j = 0; j < 65-actualMessage.length(); j++){
+                                message += " ";
+                            }
+                            messageBlock.append(message + actualMessage + " <--" + "\n");
+                        }
+                    }
+                    else
+                    {
+                        String actualMessage = account.getTextHistory().get(i).substring(0,account.getTextHistory().get(i).indexOf("/"));
+                        String splitMessage = "";
+                        String copyMessage = actualMessage;
+
+                        if (actualMessage.length() > 65){
+                            while (copyMessage.length() > 65){
+                                String lastWord = copyMessage.substring(0, 65);
+                                String newMessage = copyMessage.substring(0, lastWord.lastIndexOf(" ")) + "|";
+
+                                splitMessage += newMessage;
+                                copyMessage = copyMessage.substring(lastWord.lastIndexOf(" "));
+                            }
+                            String[] splits = splitMessage.split("\\|");
+
+                            for (int a = 0; a < splits.length; a++){
+                                if (a == 0){
+                                    messageBlock.append("--> " + splits[a] + "\n");
+                                }
+                                else{
+                                    messageBlock.append("   "  + splits[a] + "\n");
+                                }
+                            }
+                        }
+                        else{
+                            messageBlock.append("--> "  + actualMessage + "\n");
+                        }
+                    }
+                }
+            }
+    }
 }

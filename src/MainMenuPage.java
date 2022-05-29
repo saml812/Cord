@@ -29,8 +29,6 @@ public class MainMenuPage extends JFrame{
         frame.setPreferredSize(new Dimension(1200, 800));
         frame.setResizable(false);
         frame.add(panel1);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         displayName.setText("Hello " + account.getName());
 
@@ -87,5 +85,8 @@ public class MainMenuPage extends JFrame{
                 new MainMenuPage(server);
             }
         });
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
     }
 }
