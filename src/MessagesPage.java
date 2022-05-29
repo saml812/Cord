@@ -170,13 +170,20 @@ public class MessagesPage extends JFrame{
 
         userDM.setText(selectedProfile.getName() + "'s messages");
 
+        boolean exist = false;
+        for (String text : account.getTextHistory()){
+            if (text.contains(selectedProfile.getName())){
+                exist = true;
+            }
+        }
+        if (exist){
             for (int i = 0; i < account.getTextHistory().size(); i++){
                 String between = account.getTextHistory().get(i).substring(account.getTextHistory().get(i).indexOf("/")+1);
                 if (between.equals(account.getName() + "/" + selectedProfile.getName()) || between.equals(selectedProfile.getName() + "/" + account.getName())){
                     if (between.substring(0,between.indexOf("/")).equals(account.getName())){
 
-                        String message = "";
-                        String splitMessage = "";
+                        String spaces = "";
+                        String splitMessages = "";
                         String actualMessage = account.getTextHistory().get(i).substring(0,account.getTextHistory().get(i).indexOf("/"));
                         String copyMessage = actualMessage;
 
@@ -185,29 +192,29 @@ public class MessagesPage extends JFrame{
                                 String lastWord = copyMessage.substring(0, 65);
                                 String newMessage = copyMessage.substring(0, lastWord.lastIndexOf(" ")) + "|";
 
-                                splitMessage += newMessage;
+                                splitMessages += newMessage;
                                 copyMessage = copyMessage.substring(lastWord.lastIndexOf(" "));
                             }
-                            String[] splits = splitMessage.split("\\|");
+                            String[] splits = splitMessages.split("\\|");
 
                             for (int j = 0; j < 65-splits[0].length(); j++){
-                                message += " ";
+                                spaces += " ";
                             }
 
                             for (int a = 0; a < splits.length; a++){
                                 if (a == 0){
-                                    messageBlock.append(message + splits[a] + " <--  " + "\n");
+                                    messageBlock.append(spaces + splits[a] + " <--  " + "\n");
                                 }
                                 else{
-                                    messageBlock.append(message + splits[a] + "     " + "\n");
+                                    messageBlock.append(spaces + splits[a] + "     " + "\n");
                                 }
                             }
                         }
                         else{
                             for (int j = 0; j < 65-actualMessage.length(); j++){
-                                message += " ";
+                                spaces += " ";
                             }
-                            messageBlock.append(message + actualMessage + " <--" + "\n");
+                            messageBlock.append(spaces + actualMessage + " <--" + "\n");
                         }
                     }
                     else
@@ -241,5 +248,10 @@ public class MessagesPage extends JFrame{
                     }
                 }
             }
+        }
+        else{
+            messageBlock.append("No existing messages");
+        }
+
     }
 }
