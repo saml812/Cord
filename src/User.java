@@ -126,34 +126,4 @@ public class User {
     public String getPassword() {
         return password;
     }
-
-    public void displayInfo(){
-        System.out.println("------------ " + getName() + "'s profile ----------");
-        System.out.println("Name: " + getName());
-        System.out.println("Age: " + getAge());
-        String Hobbies = "Hobbies: ";
-        if (getHobbies().size() == 0){
-            Hobbies += getName() + " has no hobbies";
-        }
-        else
-        {
-            for (String hobby : getHobbies()){
-                Hobbies += hobby + ", ";
-            }
-            Hobbies = Hobbies.substring(0,Hobbies.length()-2);
-        }
-        System.out.println(Hobbies);
-        String Friends = "Friends: ";
-        if (getFriends().size() == 0){
-            Friends += getName() + " has no friends";
-        }
-        else
-        {
-            for (User friend : getFriends()){
-                Friends += friend.getName() + ", ";
-            }
-            Friends = Friends.substring(0,Friends.length()-2);
-        }
-        System.out.println(Friends);
-    }
 }
